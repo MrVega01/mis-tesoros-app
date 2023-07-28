@@ -1,35 +1,39 @@
-import { useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, View } from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import Constants from 'expo-constants'
+import { NavigationContainer } from '@react-navigation/native'
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
+import ProductsView from './src/views/Products'
 import { theme } from './src/theme'
-import StyledText from './src/components/StyledText'
-import TaxForm from './src/components/TaxForm'
-import { ProductForm } from './src/components/ProductForm'
-import ProductList from './src/components/ProductList'
+import TaxView from './src/views/Tax'
+import ProductFormView from './src/views/ProductForm'
+
+const Tab = createMaterialBottomTabNavigator()
 
 export default function App () {
-  const [tax, setTax] = useState(0)
-  AsyncStorage.getItem('tax').then(value => value && setTax(value))
-
   return (
-    <>
+    <NavigationContainer>
       <StatusBar style='light' />
-      <View style={styles.container}>
-        <StyledText>Administrador de Inventario</StyledText>
-        <ProductForm />
-        <TaxForm taxState={[tax, setTax]} />
-        <ProductList tax={tax} />
-      </View>
-    </>
+      <Tab.Navigator
+        barStyle={barStyles}
+        activeColor={theme.appBar.textPrimary}
+        inactiveColor={theme.appBar.textSecondary}
+      >
+        <Tab.Screen
+          name='Productos'
+          component={ProductsView}
+        />
+        <Tab.Screen
+          name='Tasa'
+          component={TaxView}
+        />
+        <Tab.Screen
+          name='Crear producto'
+          component={ProductFormView}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: theme.colors.primary,
-    paddingTop: Constants.statusBarHeight
-  }
-})
+const barStyles = {
+  backgroundColor: theme.appBar.primary
+}
