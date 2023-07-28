@@ -6,7 +6,7 @@ import ProductList from '../components/ProductList'
 export default function ProductsView () {
   return (
     <View style={styles.container}>
-      <ProductList tax={0} />
+      <ProductList />
     </View>
   )
 }

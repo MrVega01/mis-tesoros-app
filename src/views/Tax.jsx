@@ -1,17 +1,17 @@
-import { useState } from 'react'
+import { useContext } from 'react'
 import { StyleSheet, View } from 'react-native'
 import Constants from 'expo-constants'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import TaxForm from '../components/TaxForm'
 import { theme } from '../theme'
+import { GlobalContext } from '../context/global'
 
 export default function TaxView () {
-  const [tax, setTax] = useState(0)
-  AsyncStorage.getItem('tax').then(value => value && setTax(value))
+  const { state, updateTax } = useContext(GlobalContext)
+  const { tax } = state
 
   return (
     <View style={styles.container}>
-      <TaxForm taxState={[tax, setTax]} />
+      <TaxForm taxState={[tax, updateTax]} />
     </View>
   )
 }

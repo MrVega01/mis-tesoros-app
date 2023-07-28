@@ -5,31 +5,34 @@ import ProductsView from './src/views/Products'
 import { theme } from './src/theme'
 import TaxView from './src/views/Tax'
 import ProductFormView from './src/views/ProductForm'
+import { GlobalContextProvider } from './src/context/global'
 
 const Tab = createMaterialBottomTabNavigator()
 
 export default function App () {
   return (
     <NavigationContainer>
-      <StatusBar style='light' />
-      <Tab.Navigator
-        barStyle={barStyles}
-        activeColor={theme.appBar.textPrimary}
-        inactiveColor={theme.appBar.textSecondary}
-      >
-        <Tab.Screen
-          name='Productos'
-          component={ProductsView}
-        />
-        <Tab.Screen
-          name='Tasa'
-          component={TaxView}
-        />
-        <Tab.Screen
-          name='Crear producto'
-          component={ProductFormView}
-        />
-      </Tab.Navigator>
+      <GlobalContextProvider>
+        <StatusBar style='light' />
+        <Tab.Navigator
+          barStyle={barStyles}
+          activeColor={theme.appBar.textPrimary}
+          inactiveColor={theme.appBar.textSecondary}
+        >
+          <Tab.Screen
+            name='Productos'
+            component={ProductsView}
+          />
+          <Tab.Screen
+            name='Tasa'
+            component={TaxView}
+          />
+          <Tab.Screen
+            name='Crear producto'
+            component={ProductFormView}
+          />
+        </Tab.Navigator>
+      </GlobalContextProvider>
     </NavigationContainer>
   )
 }
