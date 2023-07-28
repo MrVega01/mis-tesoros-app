@@ -3,7 +3,6 @@ import StyledText from './StyledText'
 import { theme } from '../theme'
 
 export function Product ({ product, tax }) {
-  console.log(product)
   const { id, name, price, type, quantity } = product
   return (
     <View style={styles.container}>

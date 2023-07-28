@@ -7,7 +7,7 @@ import { theme } from '../theme'
 export default function TaxForm ({ taxState }) {
   const [tax, setTax] = taxState
 
-  const handlerChangeText = (value) => {
+  const handlerChangeText = (name, value) => {
     setTax(Number(value))
     AsyncStorage.setItem('tax', value)
   }
@@ -15,7 +15,7 @@ export default function TaxForm ({ taxState }) {
   return (
     <View style={styles.container}>
       <StyledText style={styles.label}>Inserte la tasa diaria</StyledText>
-      <StyledTextInput keyboardType='numeric' onChangeText={handlerChangeText}>{tax}</StyledTextInput>
+      <StyledTextInput keyboardType='numeric' onChangeText={handlerChangeText} name='tax'>{tax}</StyledTextInput>
     </View>
   )
 }
