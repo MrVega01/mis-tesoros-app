@@ -22,13 +22,13 @@ export function ProductForm () {
     <View style={styles.container}>
       <StyledText style={styles.label}>Inserte el nombre</StyledText>
       <StyledTextInput
-        ref={el => { formRefs.current[0] = el }}
+        inputRef={el => { formRefs.current[0] = el }}
         name='name'
         onChangeText={changeInputHandler}
       />
       <StyledText style={styles.label}>Inserte el precio</StyledText>
       <StyledTextInput
-        ref={el => { formRefs.current[1] = el }}
+        inputRef={el => { formRefs.current[1] = el }}
         name='price'
         onChangeText={changeInputHandler}
         keyboardType='numeric'
@@ -38,11 +38,16 @@ export function ProductForm () {
         formValues={formValues}
         name='type'
         onChange={changeInputHandler}
-        items={['Alimento', 'Bebida', 'Limpieza', 'Cofitería']}
+        items={[
+          ['Alimento', 1],
+          ['Bebida', 2],
+          ['Limpieza', 3],
+          ['Cofitería', 4]
+        ]}
       />
       <StyledText style={styles.label}>Inserte la cantidad</StyledText>
       <StyledTextInput
-        ref={el => { formRefs.current[2] = el }}
+        inputRef={el => { formRefs.current[2] = el }}
         name='quantity'
         onChangeText={changeInputHandler}
         keyboardType='numeric'

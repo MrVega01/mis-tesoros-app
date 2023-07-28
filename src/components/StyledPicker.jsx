@@ -19,8 +19,9 @@ export default function StyledPicker ({ style = {}, formValues, onChange, name, 
           onChange(name, itemValue)}
         {...props}
       >
+        <Picker.Item label='Selecciona un tipo' value={null} />
         {
-          items.map(item => <Picker.Item key={item} label={item} value={item} />)
+          items.map(item => <Picker.Item key={item[1]} label={item[0]} value={item[1]} />)
         }
       </Picker>
     </View>
