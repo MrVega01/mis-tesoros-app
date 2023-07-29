@@ -3,21 +3,31 @@ import StyledTextInput from './StyledTextInput'
 import StyledPicker from './StyledPicker'
 import { theme } from '../theme'
 import StyledText from './StyledText'
-import { useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import useSaveProduct from '../hooks/useSaveProduct'
+import { GlobalContext } from '../context/global'
 
 export function ProductForm () {
   const [formValues, setFormValues] = useState({})
+  const { state } = useContext(GlobalContext)
   const formRefs = useRef([])
-  const { saveProduct } = useSaveProduct()
+  const { saveProduct, loading } = useSaveProduct()
 
   const submitHandler = () => {
     saveProduct(formValues)
-    formRefs.current.forEach(input => input.clear())
   }
   const changeInputHandler = (name, value) => {
     setFormValues(oldValues => ({ ...oldValues, [name]: value }))
   }
+
+  useEffect(() => {
+    if (loading === true) formRefs.current.forEach(input => input.clear())
+    else {
+      const { refreshProducts } = state
+      refreshProducts && refreshProducts()
+    }
+  }, [loading])
+
   return (
     <View style={styles.container}>
       <StyledText style={styles.label}>Inserte el nombre</StyledText>
