@@ -10,6 +10,10 @@ export default function ProductList () {
   const { tax } = state
   const { products, loading, refresh } = useProducts()
 
+  useEffect(() => {
+    addRefreshProduct(refresh)
+  }, [])
+
   return (
     <>
       {
