@@ -1,4 +1,4 @@
-import { Button, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import StyledTextInput from './StyledTextInput'
 import StyledPicker from './StyledPicker'
 import { theme } from '../theme'
@@ -6,6 +6,7 @@ import StyledText from './StyledText'
 import { useContext, useEffect, useRef, useState } from 'react'
 import useSaveProduct from '../hooks/useSaveProduct'
 import { GlobalContext } from '../context/global'
+import StyledTouchableHighlight from './StyledTouchableHighlight'
 
 export function ProductForm () {
   const [formValues, setFormValues] = useState({})
@@ -62,7 +63,7 @@ export function ProductForm () {
         onChangeText={changeInputHandler}
         keyboardType='numeric'
       />
-      <Button title='Subir' onPress={submitHandler} />
+      <StyledTouchableHighlight title='Subir' onPress={submitHandler} />
     </View>
   )
 }
