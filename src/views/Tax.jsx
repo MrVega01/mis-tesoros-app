@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.primary,
-    paddingTop: Constants.statusBarHeight,
+    paddingTop: Constants.statusBarHeight + 20,
     textAlign: 'center'
   }
 })
