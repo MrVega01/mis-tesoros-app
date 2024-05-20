@@ -1,60 +1,30 @@
 import { StatusBar } from 'expo-status-bar'
 import { NavigationContainer } from '@react-navigation/native'
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
-import ProductsView from './src/views/Products'
-import { theme } from './src/theme'
-import TaxView from './src/views/Tax'
-import ProductFormView from './src/views/ProductForm'
+import { createStackNavigator } from '@react-navigation/stack'
 import { GlobalContextProvider } from './src/context/global'
-import AddSVG from './src/img/Add'
-import MoneySVG from './src/img/Money'
-import StoreSVG from './src/img/Store'
+import Home from './src/routes/Home'
+import ProductFormView from './src/views/ProductForm'
 
-const Tab = createMaterialBottomTabNavigator()
+const Stack = createStackNavigator()
 
 export default function App () {
   return (
     <NavigationContainer>
       <GlobalContextProvider>
         <StatusBar style='light' />
-        <Tab.Navigator
-          barStyle={barStyles}
-          activeColor={theme.appBar.textPrimary}
-          inactiveColor={theme.appBar.textSecondary}
-        >
-          <Tab.Screen
-            name='Productos'
-            component={ProductsView}
-            options={{
-              tabBarIcon: ({ color }) => (
-                <StoreSVG color={color} />
-              )
-            }}
+        <Stack.Navigator>
+          <Stack.Screen
+            name='Home'
+            component={Home}
+            options={{ headerShown: false }}
           />
-          <Tab.Screen
-            name='Tasa'
-            component={TaxView}
-            options={{
-              tabBarIcon: ({ color }) => (
-                <MoneySVG color={color} />
-              )
-            }}
-          />
-          <Tab.Screen
-            name='Crear producto'
+          <Stack.Screen
+            name='CreateProduct'
             component={ProductFormView}
-            options={{
-              tabBarIcon: ({ color }) => (
-                <AddSVG color={color} />
-              )
-            }}
+            options={{ headerShown: false }}
           />
-        </Tab.Navigator>
+        </Stack.Navigator>
       </GlobalContextProvider>
     </NavigationContainer>
   )
-}
-
-const barStyles = {
-  backgroundColor: theme.appBar.primary
 }
