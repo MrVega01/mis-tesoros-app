@@ -3,14 +3,12 @@ import StyledTextInput from './StyledTextInput'
 import StyledPicker from './StyledPicker'
 import { theme } from '../theme'
 import StyledText from './StyledText'
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import useSaveProduct from '../hooks/useSaveProduct'
-import { GlobalContext } from '../context/global'
 import StyledTouchableHighlight from './StyledTouchableHighlight'
 
 export function ProductForm () {
   const [formValues, setFormValues] = useState({})
-  const { state } = useContext(GlobalContext)
   const formRefs = useRef([])
   const { saveProduct, loading } = useSaveProduct()
 
@@ -23,10 +21,6 @@ export function ProductForm () {
 
   useEffect(() => {
     if (loading === true) formRefs.current.forEach(input => input.clear())
-    else {
-      const { refreshProducts } = state
-      refreshProducts && refreshProducts()
-    }
   }, [loading])
 
   return (

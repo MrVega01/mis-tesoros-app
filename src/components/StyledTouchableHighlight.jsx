@@ -2,10 +2,10 @@ import { StyleSheet, TouchableHighlight, View } from 'react-native'
 import { theme } from '../theme'
 import StyledText from './StyledText'
 
-export default function StyledTouchableHighlight ({ title, onPress }) {
+export default function StyledTouchableHighlight ({ title, onPress, style }) {
   return (
     <TouchableHighlight onPress={onPress}>
-      <View style={styles.touchable}>
+      <View style={[styles.touchable, style]}>
         <StyledText style={styles.touchableText}>{title}</StyledText>
       </View>
     </TouchableHighlight>

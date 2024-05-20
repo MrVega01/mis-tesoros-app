@@ -1,8 +1,8 @@
 export const theme = {
   appBar: {
     primary: '#dd851f',
-    textPrimary: '#1f1f2e',
-    textSecondary: '#505050'
+    secondary: '#1f1f2e',
+    textPrimary: '#fefefe'
   },
   colors: {
     textPrimary: '#fefefe',

@@ -9,10 +9,6 @@ export function useGlobalReducer () {
     type: 'UPDATE_TAX',
     payload: tax
   })
-  const addRefreshProduct = (refresh) => dispatch({
-    type: 'ADD_REFRESH_PRODUCT',
-    payload: refresh
-  })
 
   useEffect(() => {
     AsyncStorage.getItem('tax').then(value => value && updateTax(value))
@@ -20,7 +16,6 @@ export function useGlobalReducer () {
 
   return {
     state,
-    updateTax,
-    addRefreshProduct
+    updateTax
   }
 }

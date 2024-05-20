@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { API_URL } from '../utils/constants'
 
-export default function useProducts () {
+export default function useProducts (fetchDependencies) {
   const [products, setProducts] = useState([])
   const [refresh, setRefresh] = useState(false)
   const loading = useRef(false)
 
-  const refreshProducts = () => {
-    setRefresh(oldValue => !oldValue)
+  const refreshFetch = () => {
+    setRefresh(refresh => !refresh)
   }
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export default function useProducts () {
         loading.current = true
       })
       .catch(e => console.log(e))
-  }, [refresh])
+  }, [...fetchDependencies, refresh])
 
-  return { products, loading, refresh: refreshProducts }
+  return { products, loading, refresh: refreshFetch }
 }

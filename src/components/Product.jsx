@@ -1,26 +1,12 @@
-import { View, StyleSheet, TouchableHighlight, Alert } from 'react-native'
+import { View, StyleSheet, TouchableHighlight } from 'react-native'
 import StyledText from './StyledText'
 import { theme } from '../theme'
-import { useDeleteProduct } from '../hooks/useDeleteProduct'
 
-export function Product ({ product, tax }) {
-  const { id, name, price, type, quantity } = product
-  const { deleteProduct } = useDeleteProduct()
-  const longPressHandler = () => {
-    Alert.alert('Eliminar producto', `El producto "${name}" será eliminado`, [
-      {
-        text: 'Cancelar',
-        style: 'cancel'
-      },
-      {
-        text: 'OK',
-        onPress: () => deleteProduct(id)
-      }
-    ])
-  }
+export function Product ({ product, tax, onLongPress }) {
+  const { name, price, type, quantity } = product
 
   return (
-    <TouchableHighlight onLongPress={longPressHandler}>
+    <TouchableHighlight onLongPress={() => { onLongPress(product) }}>
       <View style={styles.container}>
         <View style={styles.textBox}>
           <StyledText size='title'>{name}</StyledText>

@@ -4,12 +4,11 @@ import { useGlobalReducer } from '../hooks/useGlobalReducer'
 export const GlobalContext = createContext()
 
 export function GlobalContextProvider ({ children }) {
-  const { state, updateTax, addRefreshProduct } = useGlobalReducer()
+  const { state, updateTax } = useGlobalReducer()
   return (
     <GlobalContext.Provider value={{
       state,
-      updateTax,
-      addRefreshProduct
+      updateTax
     }}
     >
       {children}
