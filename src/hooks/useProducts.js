@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { API_URL } from '../utils/constants'
 
-export default function useProducts (fetchDependencies) {
+export default function useProducts (fetchDependencies = []) {
   const [products, setProducts] = useState([])
   const [refresh, setRefresh] = useState(false)
   const loading = useRef(false)

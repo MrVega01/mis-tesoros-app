@@ -9,7 +9,8 @@ export const theme = {
     textSecondary: '#d4d4d4',
     primary: '#1f1f2e',
     secondary: 'rgb(22, 22, 35)',
-    white: '#fefefe'
+    white: '#fefefe',
+    danger: '#DC3545'
   },
   fontSizes: {
     body: 14,

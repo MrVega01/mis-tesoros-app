@@ -3,14 +3,22 @@ import StyledTextInput from './StyledTextInput'
 import StyledPicker from './StyledPicker'
 import { theme } from '../theme'
 import StyledText from './StyledText'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import useSaveProduct from '../hooks/useSaveProduct'
 import StyledTouchableHighlight from './StyledTouchableHighlight'
+import useCategories from '../hooks/useCategories'
+import { useIsFocused } from '@react-navigation/native'
 
 export function ProductForm () {
   const [formValues, setFormValues] = useState({})
   const formRefs = useRef([])
+  const focused = useIsFocused()
+  const { categories } = useCategories([focused])
   const { saveProduct, loading } = useSaveProduct()
+
+  const pickerValues = useMemo(() => {
+    return categories.map(({ id, type }) => [type, id])
+  }, [categories])
 
   const submitHandler = () => {
     saveProduct(formValues)
@@ -43,12 +51,7 @@ export function ProductForm () {
         formValues={formValues}
         name='type'
         onChange={changeInputHandler}
-        items={[
-          ['Alimento', 1],
-          ['Bebida', 2],
-          ['Limpieza', 3],
-          ['Cofitería', 4]
-        ]}
+        items={pickerValues}
       />
       <StyledText style={styles.label}>Inserte la cantidad</StyledText>
       <StyledTextInput

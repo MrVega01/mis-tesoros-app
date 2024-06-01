@@ -1,8 +1,8 @@
-import Constants from 'expo-constants'
 import { StyleSheet, View } from 'react-native'
+import Constants from 'expo-constants'
 import { theme } from '../theme'
 
-export default function Messages () {
+export default function CreateSaleView () {
   return (
     <View style={styles.container} />
   )

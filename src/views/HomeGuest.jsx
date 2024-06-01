@@ -1,10 +1,13 @@
 import Constants from 'expo-constants'
 import { StyleSheet, View } from 'react-native'
 import { theme } from '../theme'
+import ProductList from '../components/ProductList'
 
-export default function Messages () {
+export default function HomeGuest () {
   return (
-    <View style={styles.container} />
+    <View style={styles.container}>
+      <ProductList />
+    </View>
   )
 }
 

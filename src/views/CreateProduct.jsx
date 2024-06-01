@@ -3,7 +3,7 @@ import Constants from 'expo-constants'
 import { ProductForm } from '../components/ProductForm'
 import { theme } from '../theme'
 
-export default function ProductFormView () {
+export default function CreateProductView () {
   return (
     <View style={styles.container}>
       <ProductForm />

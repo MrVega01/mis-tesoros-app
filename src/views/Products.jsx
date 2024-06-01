@@ -2,35 +2,19 @@ import { StyleSheet, View } from 'react-native'
 import Constants from 'expo-constants'
 import { theme } from '../theme'
 import ProductList from '../components/ProductList'
-import StyledTouchableHighlight from '../components/StyledTouchableHighlight'
+import Header from '../components/Header'
+import ExpandTouchable from '../components/ExpandTouchable'
 
 export default function ProductsView ({ navigation }) {
-  const handleNavigateToCreateProduct = () => {
-    navigation.navigate('CreateProduct')
-  }
-
   return (
     <View style={styles.container}>
-      <View style={styles.buttonsContainer}>
-        <View style={styles.buttonsFlex}>
-          <StyledTouchableHighlight
-            title='Crear Producto'
-            onPress={handleNavigateToCreateProduct}
-            style={styles.button}
-          />
-          <StyledTouchableHighlight
-            title='Crear Categoria'
-            onPress={handleNavigateToCreateProduct}
-            style={styles.button}
-          />
-        </View>
-        <StyledTouchableHighlight
-          title='Registrar venta'
-          onPress={handleNavigateToCreateProduct}
-          style={styles.button}
-        />
-      </View>
       <ProductList />
+      <Header
+        title='Productos'
+        rightComponent={
+          <ExpandTouchable />
+          }
+      />
     </View>
   )
 }
@@ -39,7 +23,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.primary,
-    paddingTop: Constants.statusBarHeight + 20
+    paddingTop: Constants.statusBarHeight + 20,
+    gap: 12,
+    flexDirection: 'column-reverse'
   },
   buttonsContainer: {
     gap: 12
@@ -48,7 +34,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 12
-  },
-  button: {
   }
 })

@@ -1,7 +1,7 @@
 import { TextInput, StyleSheet } from 'react-native'
 import { theme } from '../theme'
 
-export default function StyledTextInput ({ style = {}, error, children, onChangeText, name, inputRef, ...props }) {
+export default function StyledTextInput ({ style = {}, error, children, value, onChangeText, name, inputRef, ...props }) {
   const inputStyle = [
     styles.textInput,
     error && styles.error,
@@ -11,6 +11,7 @@ export default function StyledTextInput ({ style = {}, error, children, onChange
     <TextInput
       style={inputStyle}
       onChangeText={value => onChangeText && onChangeText(name, value)}
+      value={value}
       ref={inputRef}
       {...props}
     >{children}
