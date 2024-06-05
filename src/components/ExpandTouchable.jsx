@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native'
 import { useState } from 'react'
 
 export default function ExpandTouchable () {
-  const [expanded, setExpanded] = useState(true)
+  const [expanded, setExpanded] = useState(false)
   const navigation = useNavigation()
 
   const handleNavigateToCreateProduct = () => {

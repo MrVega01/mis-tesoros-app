@@ -49,3 +49,20 @@ export function useSaveCategory () {
   }
   return { saveCategory, loading }
 }
+export function useDeleteCategory () {
+  const [loading, setLoading] = useState(false)
+
+  const deleteCategory = (id) => {
+    if (id) {
+      setLoading(true)
+
+      globalThis.fetch(`${API_URL}/types/${id}`, { method: 'DELETE' })
+        .then(() => {
+          setLoading(false)
+        })
+        .catch(e => console.log(e))
+    }
+  }
+
+  return { deleteCategory, loading }
+}
