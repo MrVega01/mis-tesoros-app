@@ -16,6 +16,7 @@ export default function useCategories (fetchDependencies = []) {
     globalThis.fetch(`${API_URL}/types`)
       .then(response => response.json())
       .then(response => {
+        console.log(response, 'response')
         setCategories(response)
         loading.current = true
       })
@@ -56,7 +57,7 @@ export function useDeleteCategory () {
     if (id) {
       setLoading(true)
 
-      globalThis.fetch(`${API_URL}/types/${id}`, { method: 'DELETE' })
+      return globalThis.fetch(`${API_URL}/types/${id}`, { method: 'DELETE' })
         .then(() => {
           setLoading(false)
         })

@@ -1,18 +1,18 @@
 import { StyleSheet, TouchableHighlight, View } from 'react-native'
 import StyledText from './StyledText'
 import DeleteSVG from '../img/Delete'
-import EditSVG from '../img/Edit'
+// import EditSVG from '../img/Edit'
 import { theme } from '../theme'
 
-export default function CategoryItem ({ id, name, style }) {
+export default function CategoryItem ({ id, name, style, onDelete }) {
   return (
     <View style={[styles.container, style]}>
       <StyledText size='subheading'>{name}</StyledText>
       <View style={styles.flexButtons}>
-        <TouchableHighlight>
+        {/* <TouchableHighlight>
           <EditSVG color={theme.colors.white} />
-        </TouchableHighlight>
-        <TouchableHighlight>
+        </TouchableHighlight> */}
+        <TouchableHighlight onPress={onDelete}>
           <DeleteSVG color={theme.colors.white} />
         </TouchableHighlight>
       </View>
