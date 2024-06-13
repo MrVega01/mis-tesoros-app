@@ -1,3 +1,2 @@
 - Create sell and restock system
-- Remove settings for now
 - Add chat

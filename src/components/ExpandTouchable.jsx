@@ -18,9 +18,9 @@ export default function ExpandTouchable () {
     navigation.navigate('Create Category')
     setExpanded(false)
   }
-  // const handleNavigateToCreateSale = () => {
-  //   navigation.navigate('Create Sale')
-  // }
+  const handleNavigateToCreateSale = () => {
+    navigation.navigate('Create Sale')
+  }
 
   return (
     <View style={styles.container}>
@@ -40,6 +40,11 @@ export default function ExpandTouchable () {
                 title='Crear Categoria'
                 style={styles.menuButton}
                 onPress={handleNavigateToCreateCategory}
+              />
+              <StyledTouchableHighlight
+                title='Crear Venta'
+                style={styles.menuButton}
+                onPress={handleNavigateToCreateSale}
               />
             </View>
           </View>

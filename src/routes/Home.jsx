@@ -5,12 +5,12 @@ import { theme } from '../theme'
 import TaxView from '../views/Tax'
 import MoneySVG from '../img/Money'
 import StoreSVG from '../img/Store'
-import SettingsSVG from '../img/Settings'
+// import SettingsSVG from '../img/Settings'
 import MessageSVG from '../img/Message'
 import { StyleSheet } from 'react-native'
 import { BottomNavigation } from 'react-native-paper'
 import Messages from '../views/Messages'
-import Settings from '../views/Settings'
+// import Settings from '../views/Settings'
 
 const Tab = createBottomTabNavigator()
 
@@ -96,7 +96,7 @@ export default function Home () {
           )
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name='Ajustes'
         component={Settings}
         options={{
@@ -106,7 +106,7 @@ export default function Home () {
             <SettingsSVG color={color} />
           )
         }}
-      />
+      /> */}
     </Tab.Navigator>
   )
 }
