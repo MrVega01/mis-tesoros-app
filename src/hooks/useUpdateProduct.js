@@ -31,5 +31,27 @@ export default function useUpdateProduct () {
     }
   }
 
-  return { updateProduct, loading }
+  const registerProductSale = async (productQuantityArray) => {
+    if (!productQuantityArray.length) return
+
+    try {
+      setLoading(true)
+      const insertTo = JSON.stringify(productQuantityArray)
+      console.log(insertTo, 'json')
+
+      return await globalThis.fetch(`${API_URL}/products/sale`, {
+        method: 'PUT',
+        body: insertTo,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return { updateProduct, registerProductSale, loading }
 }

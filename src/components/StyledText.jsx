@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSizes.sub
   },
   colorPrimary: {
-    color: theme.colors.primary
+    color: theme.colors.textPrimary
   },
   colorSecondary: {
     color: theme.colors.textSecondary

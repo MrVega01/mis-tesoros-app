@@ -6,7 +6,7 @@ export function Product ({ product, tax, onLongPress }) {
   const { name, price, type, quantity } = product
 
   return (
-    <TouchableHighlight onLongPress={() => { onLongPress(product) }}>
+    <TouchableHighlight onLongPress={() => { onLongPress && onLongPress(product) }}>
       <View style={styles.container}>
         <View style={styles.textBox}>
           <StyledText size='title'>{name}</StyledText>
