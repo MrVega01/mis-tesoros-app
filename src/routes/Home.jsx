@@ -1,15 +1,15 @@
 import { CommonActions } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import ProductsView from '../views/Products'
 import { theme } from '../theme'
-import TaxView from '../views/Tax'
 import MoneySVG from '../img/Money'
 import StoreSVG from '../img/Store'
 // import SettingsSVG from '../img/Settings'
 import MessageSVG from '../img/Message'
 import { StyleSheet } from 'react-native'
 import { BottomNavigation } from 'react-native-paper'
-import Messages from '../views/Messages'
+import ProductsView from '../views/core/Products'
+import Messages from '../views/core/Messages'
+import TaxView from '../views/company/Tax'
 // import Settings from '../views/Settings'
 
 const Tab = createBottomTabNavigator()

@@ -1,9 +1,9 @@
 import { StyleSheet, View } from 'react-native'
 import Constants from 'expo-constants'
-import { theme } from '../theme'
-import ProductList from '../components/ProductList'
-import Header from '../components/Header'
-import ExpandTouchable from '../components/ExpandTouchable'
+import { theme } from '../../theme'
+import ProductList from '../../components/ProductList'
+import Header from '../../components/Header'
+import ExpandTouchable from '../../components/ExpandTouchable'
 
 export default function ProductsView ({ navigation }) {
   return (

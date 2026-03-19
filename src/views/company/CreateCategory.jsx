@@ -1,12 +1,12 @@
 import { Alert, FlatList, StyleSheet, View } from 'react-native'
 import Constants from 'expo-constants'
-import { theme } from '../theme'
-import StyledText from '../components/StyledText'
-import StyledTextInput from '../components/StyledTextInput'
-import StyledTouchableHighlight from '../components/StyledTouchableHighlight'
+import { theme } from '../../theme'
+import StyledText from '../../components/StyledText'
+import StyledTextInput from '../../components/StyledTextInput'
+import StyledTouchableHighlight from '../../components/StyledTouchableHighlight'
 import { useState } from 'react'
-import useCategories, { useDeleteCategory, useSaveCategory } from '../hooks/useCategories'
-import CategoryItem from '../components/CategoryItem'
+import useCategories, { useDeleteCategory, useSaveCategory } from '../../hooks/useCategories'
+import CategoryItem from '../../components/CategoryItem'
 
 export default function CreateCategoryView ({ navigation }) {
   const [category, setCategory] = useState('')

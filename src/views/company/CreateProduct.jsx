@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native'
 import Constants from 'expo-constants'
-import { ProductForm } from '../components/ProductForm'
-import { theme } from '../theme'
+import { ProductForm } from '../../components/ProductForm'
+import { theme } from '../../theme'
 
 export default function CreateProductView () {
   return (
