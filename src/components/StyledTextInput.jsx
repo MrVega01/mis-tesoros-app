@@ -13,6 +13,7 @@ export default function StyledTextInput ({ style = {}, error, children, value, o
       onChangeText={value => onChangeText && onChangeText(name, value)}
       value={value}
       ref={inputRef}
+      allowFontScaling
       {...props}
     >{children}
     </TextInput>

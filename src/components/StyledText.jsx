@@ -22,7 +22,7 @@ export default function StyledText ({
     align === 'center' && styles.alignCenter,
     style
   ]
-  return <Text style={textStyles} {...restOfProps}>{children}</Text>
+  return <Text style={textStyles} allowFontScaling {...restOfProps}>{children}</Text>
 }
 
 const styles = StyleSheet.create({
