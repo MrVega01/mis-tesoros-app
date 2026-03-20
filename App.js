@@ -3,10 +3,10 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { GlobalContextProvider } from './src/context/global'
 import Home from './src/routes/Home'
-import AuthView from './src/views/core/Auth'
 import CreateProductView from './src/views/company/CreateProduct'
 import CreateCategoryView from './src/views/company/CreateCategory'
 import CreateSaleView from './src/views/company/CreateSale'
+import LoginView from './src/views/auth/Login'
 
 const Stack = createStackNavigator()
 
@@ -17,8 +17,8 @@ export default function App () {
         <StatusBar style='light' />
         <Stack.Navigator>
           <Stack.Screen
-            name='Auth'
-            component={AuthView}
+            name='LogIn'
+            component={LoginView}
             options={{ headerShown: false }}
           />
           <Stack.Screen

@@ -21,11 +21,12 @@ export default function StyledTextInput ({ style = {}, error, children, value, o
 
 const styles = StyleSheet.create({
   textInput: {
+    fontSize: 16,
     borderRadius: 5,
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.3)',
     paddingHorizontal: 15,
-    paddingVertical: 10,
+    paddingVertical: 18,
     marginBottom: 10,
     color: theme.colors.textPrimary
   },
