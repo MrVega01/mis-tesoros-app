@@ -19,6 +19,8 @@ const styles = StyleSheet.create({
     borderRadius: 8
   },
   touchableText: {
-    color: theme.colors.textPrimary
+    color: theme.colors.textPrimary,
+    fontWeight: 'bold',
+    fontSize: theme.fontSizes.subheading
   }
 })
