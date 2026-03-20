@@ -4,6 +4,8 @@ import StyledText from '../../components/StyledText'
 import StyledTextInputWithLabel from '../../components/StyledTextInputWithLabel'
 import StyledTouchableHighlight from '../../components/StyledTouchableHighlight'
 import { useState } from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import StyledTouchableLink from '../../components/StyledTouchableLink'
 
 export default function LoginView ({ navigation }) {
   const [isSeller, setIsSeller] = useState(false)
@@ -22,7 +24,7 @@ export default function LoginView ({ navigation }) {
   const goToForgot = () => navigation.navigate('ForgotPassword')
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.switchRow}>
         <StyledText style={styles.switchLabel}>Cliente</StyledText>
         <Switch
@@ -33,44 +35,46 @@ export default function LoginView ({ navigation }) {
         <StyledText style={styles.switchLabel}>Vendedor</StyledText>
       </View>
 
-      <StyledText style={styles.title}>{isSeller ? 'Ingreso Vendedor' : 'Ingreso Cliente'}</StyledText>
+      <View>
+        <StyledText style={styles.title}>{isSeller ? 'Ingreso Vendedor' : 'Ingreso Cliente'}</StyledText>
 
-      <StyledTextInputWithLabel
-        label='Email'
-        value={email}
-        name='email'
-        placeholder='Email'
-        onChangeText={(name, value) => setEmail(value)}
-        keyboardType='email-address'
-      />
+        <StyledTextInputWithLabel
+          label='Email'
+          value={email}
+          name='email'
+          placeholder='Email'
+          onChangeText={(name, value) => setEmail(value)}
+          keyboardType='email-address'
+        />
 
-      <StyledTextInputWithLabel
-        label='Contraseña'
-        value={password}
-        name='password'
-        placeholder='Contraseña'
-        onChangeText={(name, value) => setPassword(value)}
-        secureTextEntry
-      />
+        <StyledTextInputWithLabel
+          label='Contraseña'
+          value={password}
+          name='password'
+          placeholder='Contraseña'
+          onChangeText={(name, value) => setPassword(value)}
+          secureTextEntry
+        />
 
-      {error ? <StyledText style={styles.errorText}>{error}</StyledText> : null}
+        {error ? <StyledText style={styles.errorText}>{error}</StyledText> : null}
 
-      <StyledTouchableHighlight title='Ingresar' onPress={submitHandler} />
+        <StyledTouchableHighlight title='Ingresar' onPress={submitHandler} />
+      </View>
 
       <View style={styles.bottomRow}>
-        <StyledTouchableHighlight title='Registrarse' onPress={goToRegister} style={styles.linkButton} />
-        <StyledTouchableHighlight title='Olvidé mi contraseña' onPress={goToForgot} style={styles.linkButton} />
+        <StyledTouchableLink title='Registrarse' onPress={goToRegister} />
+        <StyledTouchableLink title='Olvidé mi contraseña' onPress={goToForgot} />
       </View>
-    </View>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'space-between',
     backgroundColor: theme.colors.primary,
-    padding: 16,
-    justifyContent: 'center'
+    padding: 16
   },
   switchRow: {
     flexDirection: 'row',
@@ -95,9 +99,5 @@ const styles = StyleSheet.create({
   bottomRow: {
     marginTop: 18,
     alignItems: 'center'
-  },
-  linkButton: {
-    backgroundColor: theme.colors.primary,
-    marginTop: 8
   }
 })
