@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.appBar.primary,
     padding: 12,
     alignItems: 'center',
-    borderRadius: 1000
+    borderRadius: 8
   },
   touchableText: {
     color: theme.colors.textPrimary

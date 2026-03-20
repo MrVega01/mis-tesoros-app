@@ -13,10 +13,10 @@ export const theme = {
     danger: '#DC3545'
   },
   fontSizes: {
-    body: 14,
+    body: 16,
     title: 24,
-    subheading: 16,
-    sub: 12
+    subheading: 18,
+    sub: 14
   },
   fonts: {
     main: 'System'

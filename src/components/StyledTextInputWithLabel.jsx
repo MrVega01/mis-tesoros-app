@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.primary,
     paddingHorizontal: 6,
     color: theme.colors.textSecondary,
-    fontSize: 14,
+    fontSize: theme.fontSizes.sub,
     zIndex: 2
   },
   input: {
