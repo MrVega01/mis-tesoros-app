@@ -1,8 +1,9 @@
-import { StyleSheet, View, Switch } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { theme } from '../../theme'
 import StyledText from '../../components/StyledText'
 import StyledTextInputWithLabel from '../../components/StyledTextInputWithLabel'
 import StyledTouchableHighlight from '../../components/StyledTouchableHighlight'
+import TextSwitch from '../../components/TextSwitch'
 import { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import StyledTouchableLink from '../../components/StyledTouchableLink'
@@ -34,30 +35,32 @@ export default function LoginView ({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.languageRow}>
-        <StyledText style={styles.languageLabel}>{t('common.language')}</StyledText>
-        <StyledTouchableLink
-          title={t('common.spanish')}
-          onPress={() => i18n.changeLanguage('es')}
-          underlined={i18n.language === 'es'}
-          textStyle={styles.languageLink}
-        />
-        <StyledTouchableLink
-          title={t('common.english')}
-          onPress={() => i18n.changeLanguage('en')}
-          underlined={i18n.language === 'en'}
-          textStyle={styles.languageLink}
-        />
-      </View>
-
       <View style={styles.switchRow}>
-        <StyledText style={styles.switchLabel}>{t('login.roles.client')}</StyledText>
-        <Switch
+        <View>
+          <StyledText style={styles.languageLabel}>{t('common.language')}</StyledText>
+          <StyledTouchableLink
+            title={t('common.spanish')}
+            onPress={() => i18n.changeLanguage('es')}
+            underlined={i18n.language === 'es'}
+            textStyle={styles.languageLink}
+          />
+          <StyledTouchableLink
+            title={t('common.english')}
+            onPress={() => i18n.changeLanguage('en')}
+            underlined={i18n.language === 'en'}
+            textStyle={styles.languageLink}
+          />
+        </View>
+
+        <TextSwitch
           value={isSeller}
-          onValueChange={setIsSeller}
-          thumbColor={isSeller ? theme.colors.primaryLight : theme.colors.textPrimary}
+          onChange={setIsSeller}
+          accessibilityLabel={`${t('login.roles.client')} ${t('login.roles.seller')}`}
+          options={[
+            { label: t('login.roles.client'), value: false },
+            { label: t('login.roles.seller'), value: true }
+          ]}
         />
-        <StyledText style={styles.switchLabel}>{t('login.roles.seller')}</StyledText>
       </View>
 
       <View>
@@ -98,16 +101,8 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.primary,
     padding: 16
   },
-
   switchRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
     marginBottom: 12
-  },
-  switchLabel: {
-    color: theme.colors.textSecondary,
-    marginHorizontal: 8
   },
   title: {
     textAlign: 'center',
