@@ -7,10 +7,13 @@ import CreateProductView from './src/views/company/CreateProduct'
 import CreateCategoryView from './src/views/company/CreateCategory'
 import CreateSaleView from './src/views/company/CreateSale'
 import LoginView from './src/views/auth/Login'
+import { useI18n } from './src/hooks/useI18n'
 
 const Stack = createStackNavigator()
 
 export default function App () {
+  useI18n()
+
   return (
     <NavigationContainer>
       <GlobalContextProvider>

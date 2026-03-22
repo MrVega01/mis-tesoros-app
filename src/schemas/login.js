@@ -1,9 +1,9 @@
 import { z } from 'zod'
 
-export const loginSchema = z.object({
+export const createLoginSchema = (t) => z.object({
   email: z
-    .email('Ingresa un email valido'),
+    .email(t('login.validation.emailInvalid')),
   password: z
     .string()
-    .min(8, 'La contrasena debe tener al menos 8 caracteres')
+    .min(8, t('login.validation.passwordMin'))
 })

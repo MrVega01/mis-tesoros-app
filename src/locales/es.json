@@ -1,0 +1,31 @@
+{
+  "common": {
+    "language": "Idioma",
+    "english": "Ingles",
+    "spanish": "Espanol"
+  },
+  "login": {
+    "roles": {
+      "client": "Cliente",
+      "seller": "Vendedor"
+    },
+    "title": {
+      "client": "Ingreso Cliente",
+      "seller": "Ingreso Vendedor"
+    },
+    "fields": {
+      "email": "Email",
+      "password": "Contrasena"
+    },
+    "actions": {
+      "submit": "Ingresar",
+      "register": "Registrarse",
+      "forgotPassword": "Olvide mi contrasena"
+    },
+    "validation": {
+      "emailRequired": "El email es obligatorio",
+      "emailInvalid": "Ingresa un email valido",
+      "passwordMin": "La contrasena debe tener al menos 8 caracteres"
+    }
+  }
+}

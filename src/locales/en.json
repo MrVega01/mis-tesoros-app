@@ -1,0 +1,31 @@
+{
+  "common": {
+    "language": "Language",
+    "english": "English",
+    "spanish": "Spanish"
+  },
+  "login": {
+    "roles": {
+      "client": "Client",
+      "seller": "Seller"
+    },
+    "title": {
+      "client": "Client Login",
+      "seller": "Seller Login"
+    },
+    "fields": {
+      "email": "Email",
+      "password": "Password"
+    },
+    "actions": {
+      "submit": "Sign in",
+      "register": "Register",
+      "forgotPassword": "Forgot password"
+    },
+    "validation": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Enter a valid email",
+      "passwordMin": "Password must be at least 8 characters"
+    }
+  }
+}
