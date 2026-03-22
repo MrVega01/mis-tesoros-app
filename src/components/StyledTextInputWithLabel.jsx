@@ -1,32 +1,47 @@
 import { StyleSheet, View } from 'react-native'
+import { useController } from 'react-hook-form'
 import StyledText from './StyledText'
 import StyledTextInput from './StyledTextInput'
 import { theme } from '../theme'
 
 export default function StyledTextInputWithLabel ({
   label,
+  control,
   name,
   value,
   onChangeText,
+  error,
   placeholder,
   secureTextEntry,
   style,
   inputStyle,
   ...props
 }) {
+  const { field, fieldState } = useController({
+    control,
+    name
+  })
+
+  const controlledValue = field.value ?? value ?? ''
+  const errorMessage = fieldState.error ? fieldState.error.message : error
+
   return (
     <View style={[styles.wrapper, style]}>
       <StyledText style={styles.floatingLabel}>{label}</StyledText>
       <StyledTextInput
         name={name}
-        value={value}
-        onChangeText={onChangeText}
+        value={controlledValue}
+        onChangeText={(_, newValue) => {
+          field.onChange(newValue)
+          onChangeText && onChangeText(name, newValue)
+        }}
+        error={!!errorMessage}
         placeholder={placeholder}
         secureTextEntry={secureTextEntry}
         style={[styles.input, inputStyle]}
         {...props}
       />
-      x
+      {errorMessage && <StyledText style={styles.errorText}>{errorMessage}</StyledText>}
     </View>
   )
 }
@@ -48,5 +63,12 @@ const styles = StyleSheet.create({
   },
   input: {
     marginTop: 6
+  },
+  errorText: {
+    color: theme.colors.danger,
+    fontSize: theme.fontSizes.sub,
+    marginTop: -4,
+    marginBottom: 6,
+    paddingHorizontal: 2
   }
 })

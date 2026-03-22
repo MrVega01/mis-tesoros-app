@@ -6,19 +6,26 @@ import StyledTouchableHighlight from '../../components/StyledTouchableHighlight'
 import { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import StyledTouchableLink from '../../components/StyledTouchableLink'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { loginSchema } from '../../schemas/login'
 
 export default function LoginView ({ navigation }) {
   const [isSeller, setIsSeller] = useState(false)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
+  const { control, handleSubmit } = useForm({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: '',
+      password: ''
+    }
+  })
 
-  const submitHandler = () => {
-    if (!email || !password) return setError('Completa email y contraseña')
-    setError('')
-    // Aquí iría la lógica real de login según `isSeller`
-    navigation.reset({ index: 0, routes: [{ name: 'Home' }] })
-  }
+  const submitHandler = handleSubmit((formData) => {
+    console.log('Login submit', {
+      ...formData,
+      isSeller
+    })
+  })
 
   const goToRegister = () => navigation.navigate('Register')
   const goToForgot = () => navigation.navigate('ForgotPassword')
@@ -39,24 +46,21 @@ export default function LoginView ({ navigation }) {
         <StyledText style={styles.title}>{isSeller ? 'Ingreso Vendedor' : 'Ingreso Cliente'}</StyledText>
 
         <StyledTextInputWithLabel
+          control={control}
           label='Email'
-          value={email}
           name='email'
           placeholder='Email'
-          onChangeText={(name, value) => setEmail(value)}
           keyboardType='email-address'
+          autoCapitalize='none'
         />
 
         <StyledTextInputWithLabel
+          control={control}
           label='Contraseña'
-          value={password}
           name='password'
           placeholder='Contraseña'
-          onChangeText={(name, value) => setPassword(value)}
           secureTextEntry
         />
-
-        {error ? <StyledText style={styles.errorText}>{error}</StyledText> : null}
 
         <StyledTouchableHighlight title='Ingresar' onPress={submitHandler} />
       </View>
@@ -89,11 +93,6 @@ const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
     color: theme.colors.textPrimary,
-    marginBottom: 12
-  },
-  errorText: {
-    color: theme.colors.danger,
-    textAlign: 'center',
     marginBottom: 12
   },
   bottomRow: {

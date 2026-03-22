@@ -32,6 +32,6 @@ const styles = StyleSheet.create({
     color: theme.colors.textPrimary
   },
   error: {
-    borderColor: 'rgba(255, 0, 0, 0.5)'
+    borderColor: theme.colors.danger
   }
 })
