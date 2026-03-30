@@ -1,26 +1,33 @@
-import { StyleSheet, TouchableHighlight, View } from 'react-native'
+import { StyleSheet, TouchableHighlight } from 'react-native'
 import { theme } from '../theme'
 import StyledText from './StyledText'
 
 export default function StyledTouchableHighlight ({ title, onPress, style }) {
   return (
-    <TouchableHighlight onPress={onPress}>
-      <View style={[styles.touchable, style]}>
-        <StyledText style={styles.touchableText}>{title}</StyledText>
-      </View>
+    <TouchableHighlight
+      onPress={onPress}
+      style={[styles.touchable, style]}
+      underlayColor={theme.colors.secondary}
+      accessibilityRole='button'
+      accessibilityLabel={title}
+    >
+      <StyledText style={styles.touchableText}>{title}</StyledText>
     </TouchableHighlight>
   )
 }
+
 const styles = StyleSheet.create({
   touchable: {
     backgroundColor: theme.appBar.primary,
-    padding: 12,
+    borderRadius: 10,
+    paddingVertical: 16,
     alignItems: 'center',
-    borderRadius: 8
+    justifyContent: 'center'
   },
   touchableText: {
     color: theme.colors.textPrimary,
     fontWeight: 'bold',
-    fontSize: theme.fontSizes.subheading
+    fontSize: theme.fontSizes.subheading,
+    textAlign: 'center'
   }
 })

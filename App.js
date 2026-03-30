@@ -7,6 +7,7 @@ import CreateProductView from './src/views/company/CreateProduct'
 import CreateCategoryView from './src/views/company/CreateCategory'
 import CreateSaleView from './src/views/company/CreateSale'
 import LoginView from './src/views/auth/Login'
+import SignUpView from './src/views/auth/SignUp'
 import { useI18n } from './src/hooks/useI18n'
 
 const Stack = createStackNavigator()
@@ -22,6 +23,11 @@ export default function App () {
           <Stack.Screen
             name='LogIn'
             component={LoginView}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name='SignUp'
+            component={SignUpView}
             options={{ headerShown: false }}
           />
           <Stack.Screen
