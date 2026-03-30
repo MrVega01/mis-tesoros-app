@@ -38,5 +38,30 @@
       "login": "Ingresar",
       "forgotPassword": "Olvide mi contrasena"
     }
+  },
+  "forgotPassword": {
+    "title": "Restablecer Contrasena",
+    "subtitle": "Ingresa tu email y te enviaremos un codigo",
+    "actions": {
+      "submit": "Enviar codigo",
+      "backToLogin": "Volver al ingreso",
+      "backToSignUp": "Volver al registro"
+    },
+    "validation": {
+      "emailRequired": "El email es obligatorio",
+      "emailInvalid": "Ingresa un email valido"
+    }
+  },
+  "verifyCode": {
+    "title": "Revisa tu email",
+    "subtitle": "Enviamos un codigo de 6 digitos a",
+    "actions": {
+      "submit": "Verificar codigo",
+      "resend": "Reenviar codigo",
+      "wrongEmail": "No es tu email? Volver a restablecer contrasena"
+    },
+    "validation": {
+      "codeLength": "El codigo debe tener exactamente 6 caracteres"
+    }
   }
 }

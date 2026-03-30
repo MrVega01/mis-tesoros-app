@@ -1,33 +1,15 @@
-import { useEffect, useRef, useState } from 'react'
-import { Animated } from 'react-native'
+import { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslation } from 'react-i18next'
-
-const SECTION_DURATION = 540
-const STAGGER_DELAY = 100
-const TOTAL_DURATION = 3 * STAGGER_DELAY + SECTION_DURATION
-
-export const section = (anim, i) => ({
-  opacity: anim.interpolate({
-    inputRange: [i * STAGGER_DELAY, i * STAGGER_DELAY + SECTION_DURATION],
-    outputRange: [0, 1],
-    extrapolate: 'clamp'
-  }),
-  transform: [{
-    translateY: anim.interpolate({
-      inputRange: [i * STAGGER_DELAY, i * STAGGER_DELAY + SECTION_DURATION],
-      outputRange: [20, 0],
-      extrapolate: 'clamp'
-    })
-  }]
-})
+import { useFocusEffect } from '@react-navigation/native'
+import useStaggerAnimation from './useStaggerAnimation'
 
 export default function useAuthScreen (createSchema) {
   const { t } = useTranslation()
   const [isSeller, setIsSeller] = useState(false)
 
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, reset } = useForm({
     mode: 'onSubmit',
     resolver: zodResolver(createSchema(t)),
     defaultValues: {
@@ -36,22 +18,19 @@ export default function useAuthScreen (createSchema) {
     }
   })
 
-  const staggerAnim = useRef(new Animated.Value(0)).current
-  const titleOpacity = useRef(new Animated.Value(1)).current
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        reset()
+        setIsSeller(false)
+      }
+    }, [reset])
+  )
 
-  useEffect(() => {
-    Animated.timing(staggerAnim, {
-      toValue: TOTAL_DURATION,
-      duration: TOTAL_DURATION,
-      useNativeDriver: true
-    }).start()
-  }, [])
+  const { staggerAnim, titleOpacity, animateTitleChange } = useStaggerAnimation()
 
   const handleRoleChange = (val) => {
-    Animated.sequence([
-      Animated.timing(titleOpacity, { toValue: 0, duration: 0, useNativeDriver: true }),
-      Animated.timing(titleOpacity, { toValue: 1, duration: 200, useNativeDriver: true })
-    ]).start()
+    animateTitleChange()
     setIsSeller(val)
   }
 

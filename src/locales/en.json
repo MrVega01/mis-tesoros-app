@@ -38,5 +38,30 @@
       "login": "Sign in",
       "forgotPassword": "Forgot password"
     }
+  },
+  "forgotPassword": {
+    "title": "Reset Password",
+    "subtitle": "Enter your email and we'll send you a code",
+    "actions": {
+      "submit": "Send code",
+      "backToLogin": "Back to Login",
+      "backToSignUp": "Back to Sign Up"
+    },
+    "validation": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Enter a valid email"
+    }
+  },
+  "verifyCode": {
+    "title": "Check your email",
+    "subtitle": "We sent a 6-digit code to",
+    "actions": {
+      "submit": "Verify code",
+      "resend": "Resend code",
+      "wrongEmail": "Not your email? Go back to reset password"
+    },
+    "validation": {
+      "codeLength": "Code must be exactly 6 characters"
+    }
   }
 }
