@@ -27,5 +27,16 @@
       "emailInvalid": "Enter a valid email",
       "passwordMin": "Password must be at least 8 characters"
     }
+  },
+  "signUp": {
+    "title": {
+      "client": "Client Sign Up",
+      "seller": "Seller Sign Up"
+    },
+    "actions": {
+      "submit": "Create account",
+      "login": "Sign in",
+      "forgotPassword": "Forgot password"
+    }
   }
 }

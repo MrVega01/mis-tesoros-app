@@ -27,5 +27,16 @@
       "emailInvalid": "Ingresa un email valido",
       "passwordMin": "La contrasena debe tener al menos 8 caracteres"
     }
+  },
+  "signUp": {
+    "title": {
+      "client": "Registro Cliente",
+      "seller": "Registro Vendedor"
+    },
+    "actions": {
+      "submit": "Registrarse",
+      "login": "Ingresar",
+      "forgotPassword": "Olvide mi contrasena"
+    }
   }
 }
