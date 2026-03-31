@@ -1,8 +1,8 @@
 {
   "common": {
     "language": "Idioma",
-    "english": "Ingles",
-    "spanish": "Espanol"
+    "english": "Inglés",
+    "spanish": "Español"
   },
   "login": {
     "roles": {
@@ -10,76 +10,76 @@
       "seller": "Vendedor"
     },
     "title": {
-      "client": "Ingreso Cliente",
-      "seller": "Ingreso Vendedor"
+      "client": "Ingreso de cliente",
+      "seller": "Ingreso de vendedor"
     },
     "fields": {
       "email": "Email",
-      "password": "Contrasena"
+      "password": "Contraseña"
     },
     "actions": {
       "submit": "Ingresar",
       "register": "Registrarse",
-      "forgotPassword": "Olvide mi contrasena"
+      "forgotPassword": "Olvidé mi contraseña"
     },
     "validation": {
       "emailRequired": "El email es obligatorio",
-      "emailInvalid": "Ingresa un email valido",
-      "passwordMin": "La contrasena debe tener al menos 8 caracteres"
+      "emailInvalid": "Ingresa un email válido",
+      "passwordMin": "La contraseña debe tener al menos 8 caracteres"
     }
   },
   "signUp": {
     "title": {
-      "client": "Registro Cliente",
-      "seller": "Registro Vendedor"
+      "client": "Registro de cliente",
+      "seller": "Registro de vendedor"
     },
     "actions": {
       "submit": "Registrarse",
       "login": "Ingresar",
-      "forgotPassword": "Olvide mi contrasena"
+      "forgotPassword": "Olvidé mi contraseña"
     }
   },
   "forgotPassword": {
-    "title": "Restablecer Contrasena",
-    "subtitle": "Ingresa tu email y te enviaremos un codigo",
+    "title": "Restablecer contraseña",
+    "subtitle": "Ingresa tu email y te enviaremos un código",
     "actions": {
-      "submit": "Enviar codigo",
+      "submit": "Enviar código",
       "backToLogin": "Volver al ingreso",
       "backToSignUp": "Volver al registro"
     },
     "validation": {
       "emailRequired": "El email es obligatorio",
-      "emailInvalid": "Ingresa un email valido"
+      "emailInvalid": "Ingresa un email válido"
     }
   },
   "verifyCode": {
     "title": "Revisa tu email",
-    "subtitle": "Enviamos un codigo de 6 digitos a",
+    "subtitle": "Enviamos un código de 6 dígitos a",
     "actions": {
-      "submit": "Verificar codigo",
-      "resend": "Reenviar codigo",
-      "wrongEmail": "No es tu email? Volver a restablecer contrasena"
+      "submit": "Verificar código",
+      "resend": "Reenviar código",
+      "wrongEmail": "¿No es tu email? Volver a restablecer contraseña"
     },
     "validation": {
-      "codeLength": "El codigo debe tener exactamente 6 caracteres"
+      "codeLength": "El código debe tener exactamente 6 caracteres"
     }
   },
   "resetPassword": {
-    "title": "Restablecer contrasena",
-    "subtitle": "Ingresa tu nueva contrasena.",
+    "title": "Restablecer contraseña",
+    "subtitle": "Ingresa tu nueva contraseña.",
     "fields": {
-      "password": "Nueva contrasena",
-      "confirmPassword": "Confirmar contrasena"
+      "password": "Nueva contraseña",
+      "confirmPassword": "Confirmar contraseña"
     },
     "actions": {
-      "submit": "Restablecer contrasena",
-      "backToLogin": "Volver al inicio de sesion"
+      "submit": "Restablecer contraseña",
+      "backToLogin": "Volver al inicio de sesión"
     },
     "validation": {
-      "passwordRequired": "La contrasena es requerida",
-      "passwordMin": "La contrasena debe tener al menos 8 caracteres",
-      "confirmPasswordRequired": "Por favor confirma tu contrasena",
-      "passwordsMustMatch": "Las contrasenas no coinciden"
+      "passwordRequired": "La contraseña es obligatoria",
+      "passwordMin": "La contraseña debe tener al menos 8 caracteres",
+      "confirmPasswordRequired": "Por favor, confirma tu contraseña",
+      "passwordsMustMatch": "Las contraseñas no coinciden"
     }
   }
 }
