@@ -24,7 +24,7 @@ export default function VerifyCodeView ({ navigation, route }) {
 
   const submitHandler = handleSubmit((formData) => {
     console.log('VerifyCode submit', { code: formData.code, email })
-    navigation.navigate('Home')
+    navigation.navigate('ResetPassword', { email })
   })
 
   const handleResend = () => {
@@ -50,21 +50,12 @@ export default function VerifyCodeView ({ navigation, route }) {
           control={control}
           name='code'
           placeholder='-----'
+          onSubmit={submitHandler}
         />
       </Animated.View>
 
-      {/* Section 2 — verify button */}
-      <Animated.View style={section(staggerAnim, 2)}>
-        <StyledTouchableHighlight
-          title={t('verifyCode.actions.submit')}
-          onPress={submitHandler}
-          accessibilityLabel={t('verifyCode.actions.submit')}
-          accessibilityHint='Submit your verification code to confirm your email'
-        />
-      </Animated.View>
-
-      {/* Section 3 — secondary actions */}
-      <Animated.View style={[styles.secondaryActions, section(staggerAnim, 3)]}>
+      {/* Section 2 — secondary actions */}
+      <Animated.View style={[styles.secondaryActions, section(staggerAnim, 2)]}>
         <StyledTouchableHighlight
           title={t('verifyCode.actions.resend')}
           onPress={handleResend}

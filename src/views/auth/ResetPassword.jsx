@@ -3,11 +3,13 @@ import {
   StyleSheet,
   TouchableOpacity
 } from 'react-native'
+import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslation } from 'react-i18next'
+import { useFocusEffect } from '@react-navigation/native'
 import { theme } from '../../theme'
-import { createForgotPasswordSchema } from '../../schemas/forgotPassword'
+import { createResetPasswordSchema } from '../../schemas/resetPassword'
 import useStaggerAnimation, { section } from '../../hooks/useStaggerAnimation'
 import AuthScaffold from '../../components/AuthScaffold'
 import StyledText from '../../components/StyledText'
@@ -16,23 +18,32 @@ import StyledTouchableHighlight from '../../components/StyledTouchableHighlight'
 import StyledTouchableLink from '../../components/StyledTouchableLink'
 import BackArrowSVG from '../../img/BackArrow'
 
-export default function ForgotPasswordView ({ navigation }) {
+export default function ResetPasswordView ({ navigation, route }) {
   const { t } = useTranslation()
+  const email = route.params?.email ?? ''
   const { staggerAnim } = useStaggerAnimation()
 
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, reset } = useForm({
     mode: 'onSubmit',
-    resolver: zodResolver(createForgotPasswordSchema(t)),
-    defaultValues: { email: '' }
+    resolver: zodResolver(createResetPasswordSchema(t)),
+    defaultValues: { password: '', confirmPassword: '' }
   })
 
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        reset()
+      }
+    }, [reset])
+  )
+
   const submitHandler = handleSubmit((formData) => {
-    navigation.navigate('VerifyCode', { email: formData.email })
+    console.log('ResetPassword submit', { password: formData.password, email })
+    navigation.navigate('LogIn')
   })
 
   return (
     <AuthScaffold contentContainerStyle={styles.scrollContent}>
-      {/* Section 0 — back arrow + title + subtitle */}
       <Animated.View style={[styles.headerSection, section(staggerAnim, 0)]}>
         <TouchableOpacity
           onPress={() => navigation.navigate('LogIn')}
@@ -44,48 +55,49 @@ export default function ForgotPasswordView ({ navigation }) {
           <BackArrowSVG color={theme.appBar.primary} />
         </TouchableOpacity>
 
-        <StyledText style={styles.title}>{t('forgotPassword.title')}</StyledText>
-        <StyledText style={styles.subtitle}>{t('forgotPassword.subtitle')}</StyledText>
+        <StyledText style={styles.title}>{t('resetPassword.title')}</StyledText>
+        <StyledText style={styles.subtitle}>{t('resetPassword.subtitle')}</StyledText>
       </Animated.View>
 
-      {/* Section 1 — email input */}
       <Animated.View style={[styles.inputSection, section(staggerAnim, 1)]}>
         <StyledTextInputWithLabel
-          label={t('login.fields.email')}
+          label={t('resetPassword.fields.password')}
           control={control}
-          name='email'
-          placeholder='you@example.com'
-          keyboardType='email-address'
+          name='password'
+          secureTextEntry
           autoCapitalize='none'
           autoCorrect={false}
-          accessibilityLabel={t('login.fields.email')}
-          accessibilityHint='Enter the email address associated with your account'
+          accessibilityLabel={t('resetPassword.fields.password')}
+          accessibilityHint='Enter your new password'
         />
       </Animated.View>
 
-      {/* Section 2 — send code button */}
-      <Animated.View style={section(staggerAnim, 2)}>
+      <Animated.View style={[styles.inputSection, section(staggerAnim, 2)]}>
+        <StyledTextInputWithLabel
+          label={t('resetPassword.fields.confirmPassword')}
+          control={control}
+          name='confirmPassword'
+          secureTextEntry
+          autoCapitalize='none'
+          autoCorrect={false}
+          accessibilityLabel={t('resetPassword.fields.confirmPassword')}
+          accessibilityHint='Re-enter your new password to confirm it matches'
+        />
+      </Animated.View>
+
+      <Animated.View style={[styles.footerSection, section(staggerAnim, 3)]}>
         <StyledTouchableHighlight
-          title={t('forgotPassword.actions.submit')}
+          title={t('resetPassword.actions.submit')}
           onPress={submitHandler}
-          accessibilityLabel={t('forgotPassword.actions.submit')}
-          accessibilityHint='Send a verification code to your email address'
+          accessibilityLabel={t('resetPassword.actions.submit')}
+          accessibilityHint='Submit your new password to complete the reset'
         />
-      </Animated.View>
-
-      {/* Section 3 — footer links */}
-      <Animated.View style={[styles.footerRow, section(staggerAnim, 3)]}>
         <StyledTouchableLink
-          title={t('forgotPassword.actions.backToLogin')}
+          title={t('resetPassword.actions.backToLogin')}
           onPress={() => navigation.navigate('LogIn')}
-          accessibilityLabel={t('forgotPassword.actions.backToLogin')}
+          accessibilityLabel={t('resetPassword.actions.backToLogin')}
           accessibilityHint='Navigate to the login screen'
-        />
-        <StyledTouchableLink
-          title={t('forgotPassword.actions.backToSignUp')}
-          onPress={() => navigation.navigate('SignUp')}
-          accessibilityLabel={t('forgotPassword.actions.backToSignUp')}
-          accessibilityHint='Navigate to the sign up screen'
+          style={styles.backToLoginLink}
         />
       </Animated.View>
     </AuthScaffold>
@@ -119,10 +131,13 @@ const styles = StyleSheet.create({
   inputSection: {
     marginBottom: 8
   },
-  footerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 28
+  footerSection: {
+    marginTop: 16,
+    gap: 12
+  },
+  backToLoginLink: {
+    alignSelf: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 4
   }
 })

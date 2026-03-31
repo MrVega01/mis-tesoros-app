@@ -3,14 +3,19 @@ import { useController } from 'react-hook-form'
 import { theme } from '../theme'
 import StyledText from './StyledText'
 
-export default function CodeInput ({ control, name, placeholder }) {
+export default function CodeInput ({ control, name, placeholder, onSubmit }) {
   const { field, fieldState } = useController({ control, name })
+
+  const handleChangeText = (text) => {
+    field.onChange(text)
+    if (text.length === 6 && onSubmit) onSubmit()
+  }
 
   return (
     <View style={styles.wrapper}>
       <TextInput
         value={field.value}
-        onChangeText={(text) => field.onChange(text)}
+        onChangeText={handleChangeText}
         onBlur={() => field.onBlur()}
         placeholder={placeholder}
         placeholderTextColor='rgba(212, 212, 212, 0.35)'

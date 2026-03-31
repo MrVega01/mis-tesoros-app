@@ -63,5 +63,23 @@
     "validation": {
       "codeLength": "El codigo debe tener exactamente 6 caracteres"
     }
+  },
+  "resetPassword": {
+    "title": "Restablecer contrasena",
+    "subtitle": "Ingresa tu nueva contrasena.",
+    "fields": {
+      "password": "Nueva contrasena",
+      "confirmPassword": "Confirmar contrasena"
+    },
+    "actions": {
+      "submit": "Restablecer contrasena",
+      "backToLogin": "Volver al inicio de sesion"
+    },
+    "validation": {
+      "passwordRequired": "La contrasena es requerida",
+      "passwordMin": "La contrasena debe tener al menos 8 caracteres",
+      "confirmPasswordRequired": "Por favor confirma tu contrasena",
+      "passwordsMustMatch": "Las contrasenas no coinciden"
+    }
   }
 }

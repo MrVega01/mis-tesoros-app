@@ -60,3 +60,4 @@ Custom SVG icon components in `src/img/` built with `react-native-svg`. Each exp
 - Views are organized by domain under `src/views/`: `auth/`, `company/`, `core/`, `client/`.
 - Components are in `src/components/` and are domain-agnostic reusable primitives.
 - ESLint standard style (no semicolons, 2-space indent).
+- For every code creation related with UI, it should be done by visualist agent. However, the architect should plan the integration of the requirement first, so the visualist can work over it.

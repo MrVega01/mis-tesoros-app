@@ -63,5 +63,23 @@
     "validation": {
       "codeLength": "Code must be exactly 6 characters"
     }
+  },
+  "resetPassword": {
+    "title": "Reset Password",
+    "subtitle": "Enter your new password below.",
+    "fields": {
+      "password": "New Password",
+      "confirmPassword": "Confirm Password"
+    },
+    "actions": {
+      "submit": "Reset Password",
+      "backToLogin": "Back to Login"
+    },
+    "validation": {
+      "passwordRequired": "Password is required",
+      "passwordMin": "Password must be at least 8 characters",
+      "confirmPasswordRequired": "Please confirm your password",
+      "passwordsMustMatch": "Passwords do not match"
+    }
   }
 }
