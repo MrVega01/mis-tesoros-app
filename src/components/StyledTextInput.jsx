@@ -29,7 +29,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 18,
     marginBottom: 10,
-    color: theme.colors.textPrimary
+    color: theme.colors.textPrimary,
+    letterSpacing: 0
   },
   error: {
     borderColor: theme.colors.danger
