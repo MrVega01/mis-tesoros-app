@@ -11,6 +11,7 @@ export default function StyledTextInput ({ style = {}, error, children, value, o
     <TextInput
       style={inputStyle}
       onChangeText={value => onChangeText && onChangeText(name, value)}
+      placeholderTextColor='rgba(255,255,255,0.3)'
       value={value}
       ref={inputRef}
       allowFontScaling

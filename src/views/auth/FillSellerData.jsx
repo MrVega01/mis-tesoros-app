@@ -10,6 +10,8 @@ import BrandHeader from '../../components/BrandHeader'
 import StyledText from '../../components/StyledText'
 import StyledTextInputWithLabel from '../../components/StyledTextInputWithLabel'
 import StyledTouchableHighlight from '../../components/StyledTouchableHighlight'
+import PhoneInput from '../../components/PhoneInput'
+import TextAreaInput from '../../components/TextAreaInput'
 
 export default function FillSellerDataView ({ navigation }) {
   const { t } = useTranslation()
@@ -79,15 +81,12 @@ export default function FillSellerDataView ({ navigation }) {
         </View>
 
         <View style={styles.fieldGroupSpaced}>
-          <StyledTextInputWithLabel
+          <TextAreaInput
             label={t('fillSellerData.fields.companyDescription')}
             control={control}
             name='companyDescription'
             placeholder={t('fillSellerData.fields.companyDescription')}
-            autoCapitalize='sentences'
-            autoCorrect={false}
-            accessibilityLabel={t('fillSellerData.fields.companyDescription')}
-            accessibilityHint='Enter an optional description of your company'
+            minHeight={100}
           />
           <StyledTextInputWithLabel
             label={t('fillSellerData.fields.address')}
@@ -109,16 +108,10 @@ export default function FillSellerDataView ({ navigation }) {
             accessibilityLabel={t('fillSellerData.fields.hoursOfOperation')}
             accessibilityHint='Enter your hours of operation'
           />
-          <StyledTextInputWithLabel
+          <PhoneInput
             label={t('fillSellerData.fields.contactNumber')}
             control={control}
             name='contactNumber'
-            placeholder='+58 412 000 0000'
-            keyboardType='phone-pad'
-            autoCapitalize='none'
-            autoCorrect={false}
-            accessibilityLabel={t('fillSellerData.fields.contactNumber')}
-            accessibilityHint='Enter a contact phone number'
           />
         </View>
       </Animated.View>

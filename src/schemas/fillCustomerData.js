@@ -6,5 +6,5 @@ export const createFillCustomerDataSchema = (t) => z.object({
   contactNumber: z
     .string()
     .min(1, t('fillCustomerData.validation.contactNumberRequired'))
-    .regex(/^\+?[0-9\s\-().]{7,}$/, t('fillCustomerData.validation.contactNumberInvalid'))
+    .regex(/^\+[1-9]\d{0,3}\s?\d{6,14}$/, t('fillCustomerData.validation.contactNumberInvalid'))
 })

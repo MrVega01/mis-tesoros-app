@@ -10,5 +10,5 @@ export const createFillSellerDataSchema = (t) => z.object({
   contactNumber: z
     .string()
     .min(1, t('fillSellerData.validation.contactNumberRequired'))
-    .regex(/^\+?[0-9\s\-().]{7,}$/, t('fillSellerData.validation.contactNumberInvalid'))
+    .regex(/^\+[1-9]\d{0,3}\s?\d{6,14}$/, t('fillSellerData.validation.contactNumberInvalid'))
 })

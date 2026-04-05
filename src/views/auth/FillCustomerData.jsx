@@ -10,6 +10,7 @@ import BrandHeader from '../../components/BrandHeader'
 import StyledText from '../../components/StyledText'
 import StyledTextInputWithLabel from '../../components/StyledTextInputWithLabel'
 import StyledTouchableHighlight from '../../components/StyledTouchableHighlight'
+import PhoneInput from '../../components/PhoneInput'
 
 export default function FillCustomerDataView ({ navigation }) {
   const { t } = useTranslation()
@@ -61,16 +62,10 @@ export default function FillCustomerDataView ({ navigation }) {
           accessibilityLabel={t('fillCustomerData.fields.lastName')}
           accessibilityHint='Enter your last name'
         />
-        <StyledTextInputWithLabel
+        <PhoneInput
           label={t('fillCustomerData.fields.contactNumber')}
           control={control}
           name='contactNumber'
-          placeholder='+58 412 000 0000'
-          keyboardType='phone-pad'
-          autoCapitalize='none'
-          autoCorrect={false}
-          accessibilityLabel={t('fillCustomerData.fields.contactNumber')}
-          accessibilityHint='Enter your contact phone number'
         />
       </Animated.View>
 
