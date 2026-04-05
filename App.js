@@ -10,7 +10,10 @@ import LoginView from './src/views/auth/Login'
 import SignUpView from './src/views/auth/SignUp'
 import ForgotPasswordView from './src/views/auth/ForgotPassword'
 import VerifyCodeView from './src/views/auth/VerifyCode'
+import VerifySellerView from './src/views/auth/VerifySeller'
 import ResetPasswordView from './src/views/auth/ResetPassword'
+import FillSellerDataView from './src/views/auth/FillSellerData'
+import FillCustomerDataView from './src/views/auth/FillCustomerData'
 import { useI18n } from './src/hooks/useI18n'
 
 const Stack = createStackNavigator()
@@ -34,6 +37,11 @@ export default function App () {
             options={{ headerShown: false }}
           />
           <Stack.Screen
+            name='VerifySeller'
+            component={VerifySellerView}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
             name='ForgotPassword'
             component={ForgotPasswordView}
             options={{ headerShown: false }}
@@ -46,6 +54,16 @@ export default function App () {
           <Stack.Screen
             name='ResetPassword'
             component={ResetPasswordView}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name='FillSellerData'
+            component={FillSellerDataView}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name='FillCustomerData'
+            component={FillCustomerDataView}
             options={{ headerShown: false }}
           />
           <Stack.Screen

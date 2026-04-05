@@ -4,7 +4,7 @@ import SignUpFooter from '../../components/SignUpFooter'
 import useAuthScreen from '../../hooks/useAuthScreen'
 import { createSignUpSchema } from '../../schemas/signUp'
 
-export default function SignUpView ({ navigation }) {
+export default function SignUpView ({ navigation, route }) {
   const {
     control,
     handleSubmit,
@@ -16,6 +16,11 @@ export default function SignUpView ({ navigation }) {
 
   const submitHandler = handleSubmit((formData) => {
     console.log('SignUp submit', { ...formData, isSeller })
+    if (isSeller) {
+      navigation.navigate('VerifySeller', { email: formData.email })
+    } else {
+      navigation.navigate('FillCustomerData')
+    }
   })
 
   return (

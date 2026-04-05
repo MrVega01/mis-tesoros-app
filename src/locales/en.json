@@ -64,6 +64,49 @@
       "codeLength": "Code must be exactly 6 characters"
     }
   },
+  "codeSent": {
+    "title": "Code sent!",
+    "subtitle": "We sent a verification code to",
+    "actions": {
+      "resend": "Resend code",
+      "backToSignUp": "Back to sign up"
+    }
+  },
+  "fillSellerData": {
+    "title": "Set up your business",
+    "fields": {
+      "companyName": "Company name",
+      "sellerName": "Seller name",
+      "companyType": "Type of company",
+      "companyDescription": "Description (optional)",
+      "address": "Address (optional)",
+      "hoursOfOperation": "Hours of operation (optional)",
+      "contactNumber": "Contact number"
+    },
+    "actions": { "submit": "Continue" },
+    "validation": {
+      "companyNameRequired": "Company name is required",
+      "sellerNameRequired": "Seller name is required",
+      "companyTypeRequired": "Type of company is required",
+      "contactNumberRequired": "Contact number is required",
+      "contactNumberInvalid": "Enter a valid phone number"
+    }
+  },
+  "fillCustomerData": {
+    "title": "Tell us about you",
+    "fields": {
+      "firstName": "First name",
+      "lastName": "Last name",
+      "contactNumber": "Contact number"
+    },
+    "actions": { "submit": "Continue" },
+    "validation": {
+      "firstNameRequired": "First name is required",
+      "lastNameRequired": "Last name is required",
+      "contactNumberRequired": "Contact number is required",
+      "contactNumberInvalid": "Enter a valid phone number"
+    }
+  },
   "resetPassword": {
     "title": "Reset Password",
     "subtitle": "Enter your new password below.",

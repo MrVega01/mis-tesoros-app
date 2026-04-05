@@ -16,6 +16,7 @@ export default function LoginView ({ navigation }) {
 
   const submitHandler = handleSubmit((formData) => {
     console.log('Login submit', { ...formData, isSeller })
+    navigation.navigate('Home')
   })
 
   return (

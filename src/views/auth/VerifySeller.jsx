@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { createVerifyCodeSchema } from '../../schemas/verifyCode'
 import CodeVerifyLayout from '../../components/CodeVerifyLayout'
 
-export default function VerifyCodeView ({ navigation, route }) {
+export default function VerifySellerView ({ navigation, route }) {
   const { t } = useTranslation()
   const email = route.params?.email ?? ''
   const { control, handleSubmit } = useForm({
@@ -13,22 +13,22 @@ export default function VerifyCodeView ({ navigation, route }) {
     defaultValues: { code: '' }
   })
   const submitHandler = handleSubmit((formData) => {
-    console.log('VerifyCode submit', { code: formData.code, email })
-    navigation.navigate('ResetPassword', { email })
+    console.log('VerifySeller submit', { code: formData.code, email })
+    navigation.navigate('FillSellerData')
   })
   return (
     <CodeVerifyLayout
       email={email}
-      titleKey='verifyCode.title'
-      subtitleKey='verifyCode.subtitle'
-      resendLabelKey='verifyCode.actions.resend'
-      secondaryLinkKey='verifyCode.actions.wrongEmail'
-      secondaryLinkHint='Navigate back to the reset password screen'
+      titleKey='codeSent.title'
+      subtitleKey='codeSent.subtitle'
+      resendLabelKey='codeSent.actions.resend'
+      secondaryLinkKey='codeSent.actions.backToSignUp'
+      secondaryLinkHint='Navigate back to the sign up screen'
       control={control}
       onSubmit={submitHandler}
-      onResend={() => console.log('resend', { email })}
-      onSecondaryLink={() => navigation.navigate('ForgotPassword')}
-      codePlaceholder='-----'
+      onResend={() => console.log('resend code', { email })}
+      onSecondaryLink={() => navigation.replace('SignUp')}
+      codePlaceholder='------'
     />
   )
 }

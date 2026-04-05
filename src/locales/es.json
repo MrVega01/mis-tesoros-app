@@ -64,6 +64,49 @@
       "codeLength": "El código debe tener exactamente 6 caracteres"
     }
   },
+  "codeSent": {
+    "title": "¡Código enviado!",
+    "subtitle": "Enviamos un código de verificación a",
+    "actions": {
+      "resend": "Reenviar código",
+      "backToSignUp": "Volver al registro"
+    }
+  },
+  "fillSellerData": {
+    "title": "Configura tu negocio",
+    "fields": {
+      "companyName": "Nombre de la empresa",
+      "sellerName": "Nombre del vendedor",
+      "companyType": "Tipo de empresa",
+      "companyDescription": "Descripción (opcional)",
+      "address": "Dirección (opcional)",
+      "hoursOfOperation": "Horario de atención (opcional)",
+      "contactNumber": "Número de contacto"
+    },
+    "actions": { "submit": "Continuar" },
+    "validation": {
+      "companyNameRequired": "El nombre de la empresa es requerido",
+      "sellerNameRequired": "El nombre del vendedor es requerido",
+      "companyTypeRequired": "El tipo de empresa es requerido",
+      "contactNumberRequired": "El número de contacto es requerido",
+      "contactNumberInvalid": "Ingresa un número de teléfono válido"
+    }
+  },
+  "fillCustomerData": {
+    "title": "Cuéntanos sobre ti",
+    "fields": {
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "contactNumber": "Número de contacto"
+    },
+    "actions": { "submit": "Continuar" },
+    "validation": {
+      "firstNameRequired": "El nombre es requerido",
+      "lastNameRequired": "El apellido es requerido",
+      "contactNumberRequired": "El número de contacto es requerido",
+      "contactNumberInvalid": "Ingresa un número de teléfono válido"
+    }
+  },
   "resetPassword": {
     "title": "Restablecer contraseña",
     "subtitle": "Ingresa tu nueva contraseña.",
