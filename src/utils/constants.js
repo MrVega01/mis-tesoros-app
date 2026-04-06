@@ -1,5 +1,7 @@
 export const API_URL = process.env.EXPO_PUBLIC_API_URL
 
+export const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+
 export const COUNTRY_CODES = [
   // North America
   { iso: 'US', flag: '🇺🇸', name: 'United States', dialCode: '1' },

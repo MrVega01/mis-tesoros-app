@@ -84,12 +84,33 @@
       "contactNumber": "Número de contacto"
     },
     "actions": { "submit": "Continuar" },
+    "schedule": {
+      "triggerSummary_zero": "Ningún día seleccionado",
+      "triggerSummary_one": "{{count}} día seleccionado",
+      "triggerSummary_other": "{{count}} días seleccionados",
+      "days": {
+        "monday": "Lunes",
+        "tuesday": "Martes",
+        "wednesday": "Miércoles",
+        "thursday": "Jueves",
+        "friday": "Viernes",
+        "saturday": "Sábado",
+        "sunday": "Domingo"
+      },
+      "timeLabels": {
+        "start": "Abre",
+        "end": "Cierra"
+      },
+      "timePlaceholder": "09:00:00Z",
+      "done": "Listo"
+    },
     "validation": {
       "companyNameRequired": "El nombre de la empresa es requerido",
       "sellerNameRequired": "El nombre del vendedor es requerido",
       "companyTypeRequired": "El tipo de empresa es requerido",
       "contactNumberRequired": "El número de contacto es requerido",
-      "contactNumberInvalid": "Ingresa un número de teléfono válido"
+      "contactNumberInvalid": "Ingresa un número de teléfono válido",
+      "hoursOfOperationInvalidTime": "Ingresa una hora válida (ej. 09:00:00Z)"
     }
   },
   "fillCustomerData": {

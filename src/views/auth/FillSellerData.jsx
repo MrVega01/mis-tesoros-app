@@ -12,6 +12,7 @@ import StyledTextInputWithLabel from '../../components/StyledTextInputWithLabel'
 import StyledTouchableHighlight from '../../components/StyledTouchableHighlight'
 import PhoneInput from '../../components/PhoneInput'
 import TextAreaInput from '../../components/TextAreaInput'
+import ScheduleInput from '../../components/ScheduleInput'
 
 export default function FillSellerDataView ({ navigation }) {
   const { t } = useTranslation()
@@ -26,7 +27,7 @@ export default function FillSellerDataView ({ navigation }) {
       companyType: '',
       companyDescription: '',
       address: '',
-      hoursOfOperation: '',
+      hoursOfOperation: null,
       contactNumber: ''
     }
   })
@@ -78,6 +79,11 @@ export default function FillSellerDataView ({ navigation }) {
             accessibilityLabel={t('fillSellerData.fields.companyType')}
             accessibilityHint='Enter the type of company'
           />
+          <PhoneInput
+            label={t('fillSellerData.fields.contactNumber')}
+            control={control}
+            name='contactNumber'
+          />
         </View>
 
         <View style={styles.fieldGroupSpaced}>
@@ -98,20 +104,10 @@ export default function FillSellerDataView ({ navigation }) {
             accessibilityLabel={t('fillSellerData.fields.address')}
             accessibilityHint='Enter your business address'
           />
-          <StyledTextInputWithLabel
+          <ScheduleInput
             label={t('fillSellerData.fields.hoursOfOperation')}
             control={control}
             name='hoursOfOperation'
-            placeholder={t('fillSellerData.fields.hoursOfOperation')}
-            autoCapitalize='none'
-            autoCorrect={false}
-            accessibilityLabel={t('fillSellerData.fields.hoursOfOperation')}
-            accessibilityHint='Enter your hours of operation'
-          />
-          <PhoneInput
-            label={t('fillSellerData.fields.contactNumber')}
-            control={control}
-            name='contactNumber'
           />
         </View>
       </Animated.View>

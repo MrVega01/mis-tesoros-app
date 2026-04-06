@@ -84,12 +84,33 @@
       "contactNumber": "Contact number"
     },
     "actions": { "submit": "Continue" },
+    "schedule": {
+      "triggerSummary_zero": "No days selected",
+      "triggerSummary_one": "{{count}} day selected",
+      "triggerSummary_other": "{{count}} days selected",
+      "days": {
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday"
+      },
+      "timeLabels": {
+        "start": "Opens",
+        "end": "Closes"
+      },
+      "timePlaceholder": "09:00:00Z",
+      "done": "Done"
+    },
     "validation": {
       "companyNameRequired": "Company name is required",
       "sellerNameRequired": "Seller name is required",
       "companyTypeRequired": "Type of company is required",
       "contactNumberRequired": "Contact number is required",
-      "contactNumberInvalid": "Enter a valid phone number"
+      "contactNumberInvalid": "Enter a valid phone number",
+      "hoursOfOperationInvalidTime": "Enter a valid time (e.g. 09:00:00Z)"
     }
   },
   "fillCustomerData": {
