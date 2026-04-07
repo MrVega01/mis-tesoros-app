@@ -1,6 +1,12 @@
+# Dependencies
 node_modules/
-.expo/
-dist/
+mobile/node_modules/
+api/node_modules/
+api
+# Expo
+mobile/.expo/
+mobile/dist/
+mobile/web-build/
 npm-debug.*
 *.jks
 *.p8
@@ -8,11 +14,18 @@ npm-debug.*
 *.key
 *.mobileprovision
 *.orig.*
-web-build/
+
+# Metro
+.metro-health-check*
+
+# NestJS / Node
+api/dist/
+api/prisma/generated/
+
+# Environment variables
 .env
+mobile/.env
+api/.env
 
 # macOS
 .DS_Store
-
-# Temporary files created by Metro to check the health of the file watcher
-.metro-health-check*
