@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Put } from '@nestjs/common'
 import { UserService } from './user.service'
-import { CurrentUser } from '../common/decorators/current-user.decorator'
+import { CurrentUser } from '@common/decorators/current-user.decorator'
 import { UpdateSellerProfileDto } from './dto/update-seller-profile.dto'
 import { UpdateCustomerProfileDto } from './dto/update-customer-profile.dto'
 

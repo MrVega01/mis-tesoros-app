@@ -1,13 +1,13 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
-import { APP_GUARD } from '@nestjs/core';
-import { PrismaModule } from './prisma/prisma.module';
-import { RedisModule } from './redis/redis.module';
-import { MailModule } from './mail/mail.module';
-import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
-import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
+import { Module } from '@nestjs/common'
+import { ConfigModule } from '@nestjs/config'
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler'
+import { APP_GUARD } from '@nestjs/core'
+import { PrismaModule } from '@core/prisma/prisma.module'
+import { RedisModule } from '@core/redis/redis.module'
+import { MailModule } from '@core/mail/mail.module'
+import { AuthModule } from '@modules/auth/auth.module'
+import { UserModule } from '@modules/user/user.module'
+import { JwtAuthGuard } from '@common/guards/jwt-auth.guard'
 
 @Module({
   imports: [
@@ -17,11 +17,11 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
     RedisModule,
     MailModule,
     AuthModule,
-    UserModule,
+    UserModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: JwtAuthGuard },
-    { provide: APP_GUARD, useClass: ThrottlerGuard },
-  ],
+    { provide: APP_GUARD, useClass: ThrottlerGuard }
+  ]
 })
 export class AppModule {}

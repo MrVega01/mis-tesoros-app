@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { ThrottlerGuard } from '@nestjs/throttler'
 import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
-import { UserRole, VerificationCodeType } from '../../generated/prisma/client'
+import { UserRole, VerificationCodeType } from '@generated/prisma/client'
 
 const mockAuthService = {
   register: jest.fn(),

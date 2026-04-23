@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { ForbiddenException, NotFoundException } from '@nestjs/common'
 import { UserService } from './user.service'
-import { PrismaService } from '../prisma/prisma.service'
-import { RedisService } from '../redis/redis.service'
-import { UserRole } from '../../generated/prisma/client'
+import { PrismaService } from '@core/prisma/prisma.service'
+import { RedisService } from '@core/redis/redis.service'
+import { UserRole } from '@generated/prisma/client'
 
 // ─── Fixtures ─────────────────────────────────────────────────────────────────
 

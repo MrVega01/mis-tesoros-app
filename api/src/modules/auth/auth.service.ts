@@ -9,10 +9,10 @@ import {
 import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
 import * as bcrypt from 'bcrypt'
-import { PrismaService } from '../prisma/prisma.service'
-import { RedisService } from '../redis/redis.service'
-import { MailService } from '../mail/mail.service'
-import { UserRole, VerificationCodeType } from '../../generated/prisma/client'
+import { PrismaService } from '@core/prisma/prisma.service'
+import { RedisService } from '@core/redis/redis.service'
+import { MailService } from '@core/mail/mail.service'
+import { UserRole, VerificationCodeType } from '@generated/prisma/client'
 
 @Injectable()
 export class AuthService {
@@ -39,7 +39,7 @@ export class AuthService {
       { sub: userId, email, role },
       {
         secret: this.config.get<string>('JWT_ACCESS_SECRET'),
-        expiresIn: this.config.get<string>('JWT_ACCESS_EXPIRATION', '15m')
+        expiresIn: this.config.get('JWT_ACCESS_EXPIRATION', '15m') as any
       }
     )
   }
@@ -49,13 +49,13 @@ export class AuthService {
       { sub: userId, purpose: 'password-reset' },
       {
         secret: this.config.get<string>('JWT_ACCESS_SECRET'),
-        expiresIn: '10m'
+        expiresIn: '10m' as any
       }
     )
   }
 
   private async issueRefreshToken (userId: string): Promise<string> {
-    const expiresIn = this.config.get<string>('JWT_REFRESH_EXPIRATION', '7d')
+    const expiresIn = this.config.get('JWT_REFRESH_EXPIRATION', '7d') as any
     const expiresAt = new Date()
     expiresAt.setDate(expiresAt.getDate() + 7)
 

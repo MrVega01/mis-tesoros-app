@@ -91,7 +91,11 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",
     "moduleNameMapper": {
-      "generated/prisma/client": "<rootDir>/__mocks__/prisma-client"
+      "^@generated/prisma/client$": "<rootDir>/__mocks__/prisma-client",
+      "^@modules/(.*)$": "<rootDir>/modules/$1",
+      "^@core/(.*)$": "<rootDir>/core/$1",
+      "^@common/(.*)$": "<rootDir>/common/$1",
+      "^@generated/(.*)$": "<rootDir>/../generated/$1"
     }
   }
 }

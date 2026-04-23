@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { UserController } from './user.controller'
 import { UserService } from './user.service'
-import { UserRole } from '../../generated/prisma/client'
+import { UserRole } from '@generated/prisma/client'
 
 const mockUserService = {
   getMe: jest.fn(),

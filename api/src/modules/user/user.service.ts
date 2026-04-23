@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
-import { PrismaService } from '../prisma/prisma.service'
-import { RedisService } from '../redis/redis.service'
-import { UserRole } from '../../generated/prisma/client'
+import { PrismaService } from '@core/prisma/prisma.service'
+import { RedisService } from '@core/redis/redis.service'
+import { UserRole } from '@generated/prisma/client'
 import { UpdateSellerProfileDto } from './dto/update-seller-profile.dto'
 import { UpdateCustomerProfileDto } from './dto/update-customer-profile.dto'
 
@@ -43,8 +43,8 @@ export class UserService {
 
     const profile = await this.prisma.sellerProfile.upsert({
       where: { userId },
-      create: { userId, ...dto, hoursOfOperation: dto.hoursOfOperation ?? undefined },
-      update: { ...dto, hoursOfOperation: dto.hoursOfOperation ?? undefined }
+      create: { userId, ...dto, hoursOfOperation: (dto.hoursOfOperation ?? undefined) as any },
+      update: { ...dto, hoursOfOperation: (dto.hoursOfOperation ?? undefined) as any }
     })
 
     await this.redis.del(`user:${userId}`)

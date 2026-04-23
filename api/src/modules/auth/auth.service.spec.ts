@@ -12,10 +12,10 @@ import * as bcrypt from 'bcrypt'
 import { AuthService } from './auth.service'
 
 jest.mock('bcrypt')
-import { PrismaService } from '../prisma/prisma.service'
-import { RedisService } from '../redis/redis.service'
-import { MailService } from '../mail/mail.service'
-import { UserRole, VerificationCodeType } from '../../generated/prisma/client'
+import { PrismaService } from '@core/prisma/prisma.service'
+import { RedisService } from '@core/redis/redis.service'
+import { MailService } from '@core/mail/mail.service'
+import { UserRole, VerificationCodeType } from '@generated/prisma/client'
 
 // ─── Shared mock factories ────────────────────────────────────────────────────
 
