@@ -1,21 +1,21 @@
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import * as sgMail from '@sendgrid/mail'
+import sgMail from '@sendgrid/mail'
 
 @Injectable()
 export class MailService {
-  constructor (private config: ConfigService) {
+  constructor(private config: ConfigService) {
     sgMail.setApiKey(this.config.get<string>('SENDGRID_API_KEY', ''))
   }
 
-  private get from () {
+  private get from() {
     return {
       email: this.config.get<string>('SENDGRID_FROM_EMAIL', ''),
       name: this.config.get<string>('SENDGRID_FROM_NAME', 'Mis Tesoros')
     }
   }
 
-  async sendVerificationCode (to: string, code: string): Promise<void> {
+  async sendVerificationCode(to: string, code: string): Promise<void> {
     await sgMail.send({
       to,
       from: this.from,
@@ -29,7 +29,7 @@ export class MailService {
     })
   }
 
-  async sendPasswordResetCode (to: string, code: string): Promise<void> {
+  async sendPasswordResetCode(to: string, code: string): Promise<void> {
     await sgMail.send({
       to,
       from: this.from,

@@ -12,11 +12,11 @@ import * as bcrypt from 'bcrypt'
 import { PrismaService } from '@core/prisma/prisma.service'
 import { RedisService } from '@core/redis/redis.service'
 import { MailService } from '@core/mail/mail.service'
-import { UserRole, VerificationCodeType } from '@generated/prisma/client'
+import { UserRole, VerificationCodeType } from '@prisma/client'
 
 @Injectable()
 export class AuthService {
-  constructor (
+  constructor(
     private prisma: PrismaService,
     private redis: RedisService,
     private mail: MailService,
@@ -26,25 +26,29 @@ export class AuthService {
 
   // ─── Helpers ──────────────────────────────────────────
 
-  private generateCode (): string {
+  private generateCode(): string {
     return Math.floor(100000 + Math.random() * 900000).toString()
   }
 
-  private codeExpiryMinutes (): number {
+  private codeExpiryMinutes(): number {
     return this.config.get<number>('VERIFICATION_CODE_EXPIRY_MINUTES', 15)
   }
 
-  private issueAccessToken (userId: string, email: string, role: UserRole): string {
+  private issueAccessToken(
+    userId: string,
+    email: string,
+    role: UserRole
+  ): string {
     return this.jwt.sign(
       { sub: userId, email, role },
       {
         secret: this.config.get<string>('JWT_ACCESS_SECRET'),
-        expiresIn: this.config.get('JWT_ACCESS_EXPIRATION', '15m') as any
+        expiresIn: this.config.get('JWT_ACCESS_EXPIRATION', '15m')
       }
     )
   }
 
-  private issueResetToken (userId: string): string {
+  private issueResetToken(userId: string): string {
     return this.jwt.sign(
       { sub: userId, purpose: 'password-reset' },
       {
@@ -54,8 +58,8 @@ export class AuthService {
     )
   }
 
-  private async issueRefreshToken (userId: string): Promise<string> {
-    const expiresIn = this.config.get('JWT_REFRESH_EXPIRATION', '7d') as any
+  private async issueRefreshToken(userId: string): Promise<string> {
+    const expiresIn = this.config.get('JWT_REFRESH_EXPIRATION', '7d')
     const expiresAt = new Date()
     expiresAt.setDate(expiresAt.getDate() + 7)
 
@@ -76,23 +80,41 @@ export class AuthService {
       data: { token }
     })
 
-    await this.redis.set(`refresh:${record.id}`, JSON.stringify({ userId, revoked: false }), 60 * 60 * 24 * 7)
+    await this.redis.set(
+      `refresh:${record.id}`,
+      JSON.stringify({ userId, revoked: false }),
+      60 * 60 * 24 * 7
+    )
 
     return token
   }
 
-  private async buildTokenResponse (userId: string, email: string, role: UserRole) {
+  private async buildTokenResponse(
+    userId: string,
+    email: string,
+    role: UserRole
+  ) {
     const accessToken = this.issueAccessToken(userId, email, role)
     const refreshToken = await this.issueRefreshToken(userId)
 
-    const hasProfile = role === UserRole.SELLER
-      ? !!(await this.prisma.sellerProfile.findUnique({ where: { userId } }))
-      : !!(await this.prisma.customerProfile.findUnique({ where: { userId } }))
+    const hasProfile =
+      role === UserRole.SELLER
+        ? !!(await this.prisma.sellerProfile.findUnique({ where: { userId } }))
+        : !!(await this.prisma.customerProfile.findUnique({
+            where: { userId }
+          }))
 
-    return { accessToken, refreshToken, user: { id: userId, email, role, hasProfile } }
+    return {
+      accessToken,
+      refreshToken,
+      user: { id: userId, email, role, hasProfile }
+    }
   }
 
-  private async createAndSendCode (userId: string, type: VerificationCodeType): Promise<void> {
+  private async createAndSendCode(
+    userId: string,
+    type: VerificationCodeType
+  ): Promise<void> {
     // Invalidate existing unused codes of same type
     await this.prisma.verificationCode.updateMany({
       where: { userId, type, used: false },
@@ -117,7 +139,7 @@ export class AuthService {
 
   // ─── Register ─────────────────────────────────────────
 
-  async register (email: string, password: string, role: UserRole) {
+  async register(email: string, password: string, role: UserRole) {
     const existing = await this.prisma.user.findUnique({ where: { email } })
     if (existing) throw new ConflictException('Email already registered')
 
@@ -127,7 +149,10 @@ export class AuthService {
     })
 
     if (role === UserRole.SELLER) {
-      await this.createAndSendCode(user.id, VerificationCodeType.EMAIL_CONFIRMATION)
+      await this.createAndSendCode(
+        user.id,
+        VerificationCodeType.EMAIL_CONFIRMATION
+      )
       return {
         message: 'Registration successful. Please verify your email.',
         userId: user.id,
@@ -143,13 +168,18 @@ export class AuthService {
 
   // ─── Verify Email ─────────────────────────────────────
 
-  async verifyEmail (email: string, code: string) {
+  async verifyEmail(email: string, code: string) {
     const user = await this.prisma.user.findUnique({ where: { email } })
     if (!user) throw new NotFoundException('User not found')
-    if (user.emailVerified) throw new BadRequestException('Email already verified')
+    if (user.emailVerified)
+      throw new BadRequestException('Email already verified')
 
     const record = await this.prisma.verificationCode.findFirst({
-      where: { userId: user.id, type: VerificationCodeType.EMAIL_CONFIRMATION, used: false },
+      where: {
+        userId: user.id,
+        type: VerificationCodeType.EMAIL_CONFIRMATION,
+        used: false
+      },
       orderBy: { createdAt: 'desc' }
     })
 
@@ -157,8 +187,14 @@ export class AuthService {
       throw new BadRequestException('Invalid or expired verification code')
     }
 
-    await this.prisma.verificationCode.update({ where: { id: record.id }, data: { used: true } })
-    await this.prisma.user.update({ where: { id: user.id }, data: { emailVerified: true } })
+    await this.prisma.verificationCode.update({
+      where: { id: record.id },
+      data: { used: true }
+    })
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { emailVerified: true }
+    })
 
     const result = await this.buildTokenResponse(user.id, user.email, user.role)
     return { ...result, user: { ...result.user, emailVerified: true } }
@@ -166,7 +202,7 @@ export class AuthService {
 
   // ─── Resend Code ──────────────────────────────────────
 
-  async resendCode (email: string, type: VerificationCodeType) {
+  async resendCode(email: string, type: VerificationCodeType) {
     const user = await this.prisma.user.findUnique({ where: { email } })
     if (!user) throw new NotFoundException('User not found')
     await this.createAndSendCode(user.id, type)
@@ -175,7 +211,7 @@ export class AuthService {
 
   // ─── Login ────────────────────────────────────────────
 
-  async login (email: string, password: string) {
+  async login(email: string, password: string) {
     const user = await this.prisma.user.findUnique({ where: { email } })
     if (!user) throw new UnauthorizedException('Invalid credentials')
 
@@ -192,12 +228,15 @@ export class AuthService {
     }
 
     const result = await this.buildTokenResponse(user.id, user.email, user.role)
-    return { ...result, user: { ...result.user, emailVerified: user.emailVerified } }
+    return {
+      ...result,
+      user: { ...result.user, emailVerified: user.emailVerified }
+    }
   }
 
   // ─── Refresh Token ────────────────────────────────────
 
-  async refresh (refreshToken: string) {
+  async refresh(refreshToken: string) {
     let payload: { sub: string; jti: string }
     try {
       payload = this.jwt.verify(refreshToken, {
@@ -211,20 +250,28 @@ export class AuthService {
     const cached = await this.redis.get(`refresh:${payload.jti}`)
     if (cached) {
       const data = JSON.parse(cached)
-      if (data.revoked) throw new UnauthorizedException('Refresh token has been revoked')
+      if (data.revoked)
+        throw new UnauthorizedException('Refresh token has been revoked')
     } else {
       // Fall back to DB
-      const record = await this.prisma.refreshToken.findUnique({ where: { id: payload.jti } })
+      const record = await this.prisma.refreshToken.findUnique({
+        where: { id: payload.jti }
+      })
       if (!record || record.revoked || record.expiresAt < new Date()) {
         throw new UnauthorizedException('Invalid or expired refresh token')
       }
     }
 
     // Revoke old token
-    await this.prisma.refreshToken.update({ where: { id: payload.jti }, data: { revoked: true } })
+    await this.prisma.refreshToken.update({
+      where: { id: payload.jti },
+      data: { revoked: true }
+    })
     await this.redis.del(`refresh:${payload.jti}`)
 
-    const user = await this.prisma.user.findUnique({ where: { id: payload.sub } })
+    const user = await this.prisma.user.findUnique({
+      where: { id: payload.sub }
+    })
     if (!user) throw new UnauthorizedException('User not found')
 
     const accessToken = this.issueAccessToken(user.id, user.email, user.role)
@@ -235,7 +282,7 @@ export class AuthService {
 
   // ─── Logout ───────────────────────────────────────────
 
-  async logout (refreshToken: string) {
+  async logout(refreshToken: string) {
     let payload: { jti: string }
     try {
       payload = this.jwt.verify(refreshToken, {
@@ -243,9 +290,14 @@ export class AuthService {
       })
     } catch {
       // Token may already be expired — still try to revoke by token string
-      const record = await this.prisma.refreshToken.findUnique({ where: { token: refreshToken } })
+      const record = await this.prisma.refreshToken.findUnique({
+        where: { token: refreshToken }
+      })
       if (record) {
-        await this.prisma.refreshToken.update({ where: { id: record.id }, data: { revoked: true } })
+        await this.prisma.refreshToken.update({
+          where: { id: record.id },
+          data: { revoked: true }
+        })
         await this.redis.del(`refresh:${record.id}`)
       }
       return { message: 'Logged out successfully' }
@@ -261,23 +313,30 @@ export class AuthService {
 
   // ─── Forgot Password ──────────────────────────────────
 
-  async forgotPassword (email: string) {
+  async forgotPassword(email: string) {
     const user = await this.prisma.user.findUnique({ where: { email } })
     // Always return 200 to prevent email enumeration
     if (user) {
       await this.createAndSendCode(user.id, VerificationCodeType.PASSWORD_RESET)
     }
-    return { message: 'If an account with that email exists, a reset code has been sent' }
+    return {
+      message:
+        'If an account with that email exists, a reset code has been sent'
+    }
   }
 
   // ─── Verify Reset Code ────────────────────────────────
 
-  async verifyResetCode (email: string, code: string) {
+  async verifyResetCode(email: string, code: string) {
     const user = await this.prisma.user.findUnique({ where: { email } })
     if (!user) throw new BadRequestException('Invalid or expired code')
 
     const record = await this.prisma.verificationCode.findFirst({
-      where: { userId: user.id, type: VerificationCodeType.PASSWORD_RESET, used: false },
+      where: {
+        userId: user.id,
+        type: VerificationCodeType.PASSWORD_RESET,
+        used: false
+      },
       orderBy: { createdAt: 'desc' }
     })
 
@@ -285,7 +344,10 @@ export class AuthService {
       throw new BadRequestException('Invalid or expired code')
     }
 
-    await this.prisma.verificationCode.update({ where: { id: record.id }, data: { used: true } })
+    await this.prisma.verificationCode.update({
+      where: { id: record.id },
+      data: { used: true }
+    })
 
     const resetToken = this.issueResetToken(user.id)
     return { message: 'Code verified', resetToken }
@@ -293,7 +355,7 @@ export class AuthService {
 
   // ─── Reset Password ───────────────────────────────────
 
-  async resetPassword (resetToken: string, password: string) {
+  async resetPassword(resetToken: string, password: string) {
     let payload: { sub: string; purpose: string }
     try {
       payload = this.jwt.verify(resetToken, {
@@ -308,7 +370,10 @@ export class AuthService {
     }
 
     const passwordHash = await bcrypt.hash(password, 12)
-    await this.prisma.user.update({ where: { id: payload.sub }, data: { passwordHash } })
+    await this.prisma.user.update({
+      where: { id: payload.sub },
+      data: { passwordHash }
+    })
 
     // Revoke ALL refresh tokens for this user (force re-login everywhere)
     const tokens = await this.prisma.refreshToken.findMany({

@@ -15,7 +15,7 @@ jest.mock('bcrypt')
 import { PrismaService } from '@core/prisma/prisma.service'
 import { RedisService } from '@core/redis/redis.service'
 import { MailService } from '@core/mail/mail.service'
-import { UserRole, VerificationCodeType } from '@generated/prisma/client'
+import { UserRole, VerificationCodeType } from '@prisma/client'
 
 // ─── Shared mock factories ────────────────────────────────────────────────────
 

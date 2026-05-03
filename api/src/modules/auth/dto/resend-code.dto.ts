@@ -1,5 +1,5 @@
 import { IsEmail, IsEnum } from 'class-validator'
-import { VerificationCodeType } from '@generated/prisma/client'
+import { VerificationCodeType } from '@prisma/client'
 
 export class ResendCodeDto {
   @IsEmail()

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { UserController } from './user.controller'
 import { UserService } from './user.service'
-import { UserRole } from '@generated/prisma/client'
+import { UserRole } from '@prisma/client'
 
 const mockUserService = {
   getMe: jest.fn(),
@@ -36,27 +36,44 @@ describe('UserController', () => {
 
   describe('updateSellerProfile', () => {
     it('delegates to UserService.updateSellerProfile with userId and role', async () => {
-      const dto = { companyName: 'Acme', sellerName: 'John', companyType: 'Retail', contactNumber: '+1 2025550100' }
+      const dto = {
+        companyName: 'Acme',
+        sellerName: 'John',
+        companyType: 'Retail',
+        contactNumber: '+1 2025550100'
+      }
       mockUserService.updateSellerProfile.mockResolvedValue({ message: 'ok' })
 
       await controller.updateSellerProfile(
         { userId: 'user-id', role: UserRole.SELLER },
         dto as any
       )
-      expect(mockUserService.updateSellerProfile).toHaveBeenCalledWith('user-id', UserRole.SELLER, dto)
+      expect(mockUserService.updateSellerProfile).toHaveBeenCalledWith(
+        'user-id',
+        UserRole.SELLER,
+        dto
+      )
     })
   })
 
   describe('updateCustomerProfile', () => {
     it('delegates to UserService.updateCustomerProfile with userId and role', async () => {
-      const dto = { firstName: 'Jane', lastName: 'Doe', contactNumber: '+1 2025550101' }
+      const dto = {
+        firstName: 'Jane',
+        lastName: 'Doe',
+        contactNumber: '+1 2025550101'
+      }
       mockUserService.updateCustomerProfile.mockResolvedValue({ message: 'ok' })
 
       await controller.updateCustomerProfile(
         { userId: 'user-id', role: UserRole.CUSTOMER },
         dto as any
       )
-      expect(mockUserService.updateCustomerProfile).toHaveBeenCalledWith('user-id', UserRole.CUSTOMER, dto)
+      expect(mockUserService.updateCustomerProfile).toHaveBeenCalledWith(
+        'user-id',
+        UserRole.CUSTOMER,
+        dto
+      )
     })
   })
 })

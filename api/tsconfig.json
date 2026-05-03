@@ -4,8 +4,7 @@
     "paths": {
       "@modules/*": ["src/modules/*"],
       "@core/*": ["src/core/*"],
-      "@common/*": ["src/common/*"],
-      "@generated/*": ["generated/*"]
+      "@common/*": ["src/common/*"]
     },
     "module": "nodenext",
     "moduleResolution": "nodenext",

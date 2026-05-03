@@ -1,18 +1,22 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException
+} from '@nestjs/common'
 import { PrismaService } from '@core/prisma/prisma.service'
 import { RedisService } from '@core/redis/redis.service'
-import { UserRole } from '@generated/prisma/client'
+import { UserRole } from '@prisma/client'
 import { UpdateSellerProfileDto } from './dto/update-seller-profile.dto'
 import { UpdateCustomerProfileDto } from './dto/update-customer-profile.dto'
 
 @Injectable()
 export class UserService {
-  constructor (
+  constructor(
     private prisma: PrismaService,
     private redis: RedisService
   ) {}
 
-  async getMe (userId: string) {
+  async getMe(userId: string) {
     const cacheKey = `user:${userId}`
     const cached = await this.redis.get(cacheKey)
     if (cached) return JSON.parse(cached)
@@ -28,31 +32,52 @@ export class UserService {
       email: user.email,
       role: user.role,
       emailVerified: user.emailVerified,
-      hasProfile: user.role === UserRole.SELLER
-        ? !!user.sellerProfile
-        : !!user.customerProfile,
-      profile: user.role === UserRole.SELLER ? user.sellerProfile : user.customerProfile
+      hasProfile:
+        user.role === UserRole.SELLER
+          ? !!user.sellerProfile
+          : !!user.customerProfile,
+      profile:
+        user.role === UserRole.SELLER
+          ? user.sellerProfile
+          : user.customerProfile
     }
 
     await this.redis.set(cacheKey, JSON.stringify(result), 300)
     return result
   }
 
-  async updateSellerProfile (userId: string, role: UserRole, dto: UpdateSellerProfileDto) {
-    if (role !== UserRole.SELLER) throw new ForbiddenException('Only sellers can update seller profile')
+  async updateSellerProfile(
+    userId: string,
+    role: UserRole,
+    dto: UpdateSellerProfileDto
+  ) {
+    if (role !== UserRole.SELLER)
+      throw new ForbiddenException('Only sellers can update seller profile')
 
     const profile = await this.prisma.sellerProfile.upsert({
       where: { userId },
-      create: { userId, ...dto, hoursOfOperation: (dto.hoursOfOperation ?? undefined) as any },
-      update: { ...dto, hoursOfOperation: (dto.hoursOfOperation ?? undefined) as any }
+      create: {
+        userId,
+        ...dto,
+        hoursOfOperation: (dto.hoursOfOperation ?? undefined) as any
+      },
+      update: {
+        ...dto,
+        hoursOfOperation: (dto.hoursOfOperation ?? undefined) as any
+      }
     })
 
     await this.redis.del(`user:${userId}`)
     return { message: 'Seller profile updated', profile }
   }
 
-  async updateCustomerProfile (userId: string, role: UserRole, dto: UpdateCustomerProfileDto) {
-    if (role !== UserRole.CUSTOMER) throw new ForbiddenException('Only customers can update customer profile')
+  async updateCustomerProfile(
+    userId: string,
+    role: UserRole,
+    dto: UpdateCustomerProfileDto
+  ) {
+    if (role !== UserRole.CUSTOMER)
+      throw new ForbiddenException('Only customers can update customer profile')
 
     const profile = await this.prisma.customerProfile.upsert({
       where: { userId },

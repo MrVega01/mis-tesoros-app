@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:16-alpine
@@ -12,6 +10,11 @@ services:
       POSTGRES_DB: mis_tesoros
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U mis_tesoros']
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   redis:
     image: redis:7-alpine
@@ -20,6 +23,59 @@ services:
       - '6379:6379'
     volumes:
       - redis_data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    env_file:
+      - ./api/.env
+    environment:
+      DATABASE_URL: postgresql://mis_tesoros:mis_tesoros_dev@postgres:5432/mis_tesoros?schema=public
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      NODE_ENV: production
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: >
+      sh -c "until npx prisma migrate deploy; do echo 'DB not ready, retrying...'; sleep 3; done && node dist/main"
+    profiles: [prod]
+
+  api-dev:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dev
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    env_file:
+      - ./api/.env
+    environment:
+      DATABASE_URL: postgresql://mis_tesoros:mis_tesoros_dev@postgres:5432/mis_tesoros?schema=public
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      NODE_ENV: development
+    volumes:
+      - ./api/src:/app/src
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: >
+      sh -c "until npx prisma db push --accept-data-loss; do echo 'DB not ready, retrying...'; sleep 3; done && npm run start:dev"
+    profiles: [dev]
 
 volumes:
   postgres_data:

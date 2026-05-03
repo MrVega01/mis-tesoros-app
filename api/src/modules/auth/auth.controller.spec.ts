@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { ThrottlerGuard } from '@nestjs/throttler'
 import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
-import { UserRole, VerificationCodeType } from '@generated/prisma/client'
+import { UserRole, VerificationCodeType } from '@prisma/client'
 
 const mockAuthService = {
   register: jest.fn(),
@@ -36,8 +36,16 @@ describe('AuthController', () => {
   describe('register', () => {
     it('delegates to AuthService.register with correct args', async () => {
       mockAuthService.register.mockResolvedValue({ message: 'ok' })
-      await controller.register({ email: 'a@b.com', password: 'pass1234', role: UserRole.SELLER } as any)
-      expect(mockAuthService.register).toHaveBeenCalledWith('a@b.com', 'pass1234', UserRole.SELLER)
+      await controller.register({
+        email: 'a@b.com',
+        password: 'pass1234',
+        role: UserRole.SELLER
+      } as any)
+      expect(mockAuthService.register).toHaveBeenCalledWith(
+        'a@b.com',
+        'pass1234',
+        UserRole.SELLER
+      )
     })
   })
 
@@ -45,7 +53,10 @@ describe('AuthController', () => {
     it('delegates to AuthService.verifyEmail', async () => {
       mockAuthService.verifyEmail.mockResolvedValue({ accessToken: 'tok' })
       await controller.verifyEmail({ email: 'a@b.com', code: '123456' } as any)
-      expect(mockAuthService.verifyEmail).toHaveBeenCalledWith('a@b.com', '123456')
+      expect(mockAuthService.verifyEmail).toHaveBeenCalledWith(
+        'a@b.com',
+        '123456'
+      )
     })
   })
 
@@ -82,7 +93,9 @@ describe('AuthController', () => {
   describe('logout', () => {
     it('delegates to AuthService.logout', async () => {
       mockAuthService.logout.mockResolvedValue({ message: 'ok' })
-      await controller.logout({ refreshToken: 'token' } as any, { userId: 'uid' })
+      await controller.logout({ refreshToken: 'token' } as any, {
+        userId: 'uid'
+      })
       expect(mockAuthService.logout).toHaveBeenCalledWith('token')
     })
   })
@@ -98,16 +111,28 @@ describe('AuthController', () => {
   describe('verifyResetCode', () => {
     it('delegates to AuthService.verifyResetCode', async () => {
       mockAuthService.verifyResetCode.mockResolvedValue({ resetToken: 'tok' })
-      await controller.verifyResetCode({ email: 'a@b.com', code: '123456' } as any)
-      expect(mockAuthService.verifyResetCode).toHaveBeenCalledWith('a@b.com', '123456')
+      await controller.verifyResetCode({
+        email: 'a@b.com',
+        code: '123456'
+      } as any)
+      expect(mockAuthService.verifyResetCode).toHaveBeenCalledWith(
+        'a@b.com',
+        '123456'
+      )
     })
   })
 
   describe('resetPassword', () => {
     it('delegates to AuthService.resetPassword', async () => {
       mockAuthService.resetPassword.mockResolvedValue({ message: 'ok' })
-      await controller.resetPassword({ resetToken: 'rtok', password: 'newpass1' } as any)
-      expect(mockAuthService.resetPassword).toHaveBeenCalledWith('rtok', 'newpass1')
+      await controller.resetPassword({
+        resetToken: 'rtok',
+        password: 'newpass1'
+      } as any)
+      expect(mockAuthService.resetPassword).toHaveBeenCalledWith(
+        'rtok',
+        'newpass1'
+      )
     })
   })
 })
