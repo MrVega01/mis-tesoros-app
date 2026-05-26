@@ -5,16 +5,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-# Start development server
-npx expo start
+# Start development server (from mobile/)
+pnpm start
 
-# Run on specific platform
-npx expo start --ios
-npx expo start --android
-npx expo start --web
+# Run on specific platform (from mobile/)
+pnpm start --ios
+pnpm start --android
+pnpm start --web
 
-# Lint (ESLint with standard + JSX presets)
-npx eslint .
+# Or from the monorepo root
+pnpm mobile:start
+
+# Lint (ESLint with standard + JSX presets, from mobile/)
+pnpm exec eslint .
 ```
 
 There is no test suite configured in this project.
