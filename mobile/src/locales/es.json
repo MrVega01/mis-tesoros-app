@@ -2,7 +2,12 @@
   "common": {
     "language": "Idioma",
     "english": "Inglés",
-    "spanish": "Español"
+    "spanish": "Español",
+    "loading": "Cargando...",
+    "errors": {
+      "network": "Error de conexión. Verifica tu internet.",
+      "unknown": "Ocurrió un error. Intenta de nuevo."
+    }
   },
   "login": {
     "roles": {
@@ -26,6 +31,10 @@
       "emailRequired": "El email es obligatorio",
       "emailInvalid": "Ingresa un email válido",
       "passwordMin": "La contraseña debe tener al menos 8 caracteres"
+    },
+    "errors": {
+      "invalidCredentials": "Email o contraseña incorrectos.",
+      "emailUnverified": "Debes verificar tu email antes de ingresar."
     }
   },
   "signUp": {
@@ -37,6 +46,9 @@
       "submit": "Registrarse",
       "login": "Ingresar",
       "forgotPassword": "Olvidé mi contraseña"
+    },
+    "errors": {
+      "emailTaken": "Este email ya está registrado."
     }
   },
   "forgotPassword": {
@@ -62,7 +74,11 @@
     },
     "validation": {
       "codeLength": "El código debe tener exactamente 6 caracteres"
-    }
+    },
+    "errors": {
+      "invalidCode": "El código es inválido o ha expirado."
+    },
+    "resendSuccess": "Código reenviado exitosamente."
   },
   "codeSent": {
     "title": "¡Código enviado!",
@@ -70,7 +86,11 @@
     "actions": {
       "resend": "Reenviar código",
       "backToSignUp": "Volver al registro"
-    }
+    },
+    "errors": {
+      "invalidCode": "El código es inválido o ha expirado."
+    },
+    "resendSuccess": "Código reenviado exitosamente."
   },
   "fillSellerData": {
     "title": "Configura tu negocio",
@@ -84,6 +104,9 @@
       "contactNumber": "Número de contacto"
     },
     "actions": { "submit": "Continuar" },
+    "errors": {
+      "saveFailed": "No se pudo guardar tu información. Intenta de nuevo."
+    },
     "schedule": {
       "triggerSummary_zero": "Ningún día seleccionado",
       "triggerSummary_one": "{{count}} día seleccionado",
@@ -121,6 +144,9 @@
       "contactNumber": "Número de contacto"
     },
     "actions": { "submit": "Continuar" },
+    "errors": {
+      "saveFailed": "No se pudo guardar tu información. Intenta de nuevo."
+    },
     "validation": {
       "firstNameRequired": "El nombre es requerido",
       "lastNameRequired": "El apellido es requerido",
@@ -138,6 +164,9 @@
     "actions": {
       "submit": "Restablecer contraseña",
       "backToLogin": "Volver al inicio de sesión"
+    },
+    "errors": {
+      "tokenExpired": "El enlace expiró. Solicita un nuevo código."
     },
     "validation": {
       "passwordRequired": "La contraseña es obligatoria",

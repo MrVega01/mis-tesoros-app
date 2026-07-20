@@ -2,7 +2,12 @@
   "common": {
     "language": "Language",
     "english": "English",
-    "spanish": "Spanish"
+    "spanish": "Spanish",
+    "loading": "Loading...",
+    "errors": {
+      "network": "Connection error. Check your internet.",
+      "unknown": "Something went wrong. Please try again."
+    }
   },
   "login": {
     "roles": {
@@ -26,6 +31,10 @@
       "emailRequired": "Email is required",
       "emailInvalid": "Enter a valid email",
       "passwordMin": "Password must be at least 8 characters"
+    },
+    "errors": {
+      "invalidCredentials": "Incorrect email or password.",
+      "emailUnverified": "Please verify your email before signing in."
     }
   },
   "signUp": {
@@ -37,6 +46,9 @@
       "submit": "Create account",
       "login": "Sign in",
       "forgotPassword": "Forgot password"
+    },
+    "errors": {
+      "emailTaken": "This email is already registered."
     }
   },
   "forgotPassword": {
@@ -62,7 +74,11 @@
     },
     "validation": {
       "codeLength": "Code must be exactly 6 characters"
-    }
+    },
+    "errors": {
+      "invalidCode": "The code is invalid or has expired."
+    },
+    "resendSuccess": "Code resent successfully."
   },
   "codeSent": {
     "title": "Code sent!",
@@ -70,7 +86,11 @@
     "actions": {
       "resend": "Resend code",
       "backToSignUp": "Back to sign up"
-    }
+    },
+    "errors": {
+      "invalidCode": "The code is invalid or has expired."
+    },
+    "resendSuccess": "Code resent successfully."
   },
   "fillSellerData": {
     "title": "Set up your business",
@@ -84,6 +104,9 @@
       "contactNumber": "Contact number"
     },
     "actions": { "submit": "Continue" },
+    "errors": {
+      "saveFailed": "Could not save your information. Please try again."
+    },
     "schedule": {
       "triggerSummary_zero": "No days selected",
       "triggerSummary_one": "{{count}} day selected",
@@ -121,6 +144,9 @@
       "contactNumber": "Contact number"
     },
     "actions": { "submit": "Continue" },
+    "errors": {
+      "saveFailed": "Could not save your information. Please try again."
+    },
     "validation": {
       "firstNameRequired": "First name is required",
       "lastNameRequired": "Last name is required",
@@ -138,6 +164,9 @@
     "actions": {
       "submit": "Reset Password",
       "backToLogin": "Back to Login"
+    },
+    "errors": {
+      "tokenExpired": "The link has expired. Please request a new code."
     },
     "validation": {
       "passwordRequired": "Password is required",
