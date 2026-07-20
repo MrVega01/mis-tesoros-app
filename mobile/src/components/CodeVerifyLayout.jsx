@@ -19,7 +19,9 @@ export default function CodeVerifyLayout ({
   onSubmit,
   onResend,
   onSecondaryLink,
-  codePlaceholder
+  codePlaceholder,
+  errorMessage = null,
+  resendFeedback = null
 }) {
   const { t } = useTranslation()
   const { staggerAnim } = useStaggerAnimation()
@@ -47,6 +49,11 @@ export default function CodeVerifyLayout ({
         />
       </Animated.View>
 
+      {/* Error message between code input and secondary actions */}
+      {errorMessage ? (
+        <StyledText style={styles.errorMessage}>{errorMessage}</StyledText>
+      ) : null}
+
       {/* Section 2 — secondary actions */}
       <Animated.View style={[styles.secondaryActions, section(staggerAnim, 2)]}>
         <StyledTouchableHighlight
@@ -56,6 +63,9 @@ export default function CodeVerifyLayout ({
           accessibilityLabel={t(resendLabelKey)}
           accessibilityHint='Request a new verification code to be sent to your email'
         />
+        {resendFeedback ? (
+          <StyledText style={styles.resendFeedback}>{resendFeedback}</StyledText>
+        ) : null}
         <StyledTouchableLink
           title={t(secondaryLinkKey)}
           onPress={onSecondaryLink}
@@ -126,6 +136,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4
   },
   secondaryLinkText: {
+    fontSize: theme.fontSizes.sub,
+    textAlign: 'center'
+  },
+  errorMessage: {
+    color: theme.colors.danger,
+    fontSize: theme.fontSizes.sub,
+    textAlign: 'center',
+    marginTop: 4,
+    marginBottom: 4
+  },
+  resendFeedback: {
+    color: theme.appBar.primary,
     fontSize: theme.fontSizes.sub,
     textAlign: 'center'
   }

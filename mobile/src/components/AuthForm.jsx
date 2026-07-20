@@ -5,7 +5,7 @@ import StyledText from './StyledText'
 import StyledTextInputWithLabel from './StyledTextInputWithLabel'
 import StyledTouchableHighlight from './StyledTouchableHighlight'
 
-export default function AuthForm ({ control, isSeller, titleOpacity, onSubmit, namespace }) {
+export default function AuthForm ({ control, isSeller, titleOpacity, onSubmit, namespace, errorMessage = null, loading = false }) {
   const { t } = useTranslation()
 
   return (
@@ -35,10 +35,15 @@ export default function AuthForm ({ control, isSeller, titleOpacity, onSubmit, n
         secureTextEntry
       />
 
+      {errorMessage ? (
+        <StyledText style={styles.errorMessage}>{errorMessage}</StyledText>
+      ) : null}
+
       <StyledTouchableHighlight
         title={t(`${namespace}.actions.submit`)}
         onPress={onSubmit}
         style={styles.submitButton}
+        disabled={loading}
       />
     </View>
   )
@@ -63,5 +68,10 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     marginTop: 8
+  },
+  errorMessage: {
+    color: theme.colors.danger,
+    fontSize: theme.fontSizes.sub,
+    marginBottom: 8
   }
 })
