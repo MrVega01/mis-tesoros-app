@@ -1,8 +1,4 @@
-import {
-  Animated,
-  StyleSheet,
-  TouchableOpacity
-} from 'react-native'
+import { Animated, StyleSheet, TouchableOpacity } from 'react-native'
 import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -17,10 +13,13 @@ import StyledTextInputWithLabel from '../../components/StyledTextInputWithLabel'
 import StyledTouchableHighlight from '../../components/StyledTouchableHighlight'
 import StyledTouchableLink from '../../components/StyledTouchableLink'
 import BackArrowSVG from '../../img/BackArrow'
+import { useResetPassword } from '../../hooks/usePasswordReset'
+import { resolveErrorMessage } from '../../utils/errorMessage'
+import { AUTH_ERROR_KEYS } from '../../utils/constants'
 
 export default function ResetPasswordView ({ navigation, route }) {
   const { t } = useTranslation()
-  const email = route.params?.email ?? ''
+  const resetToken = route.params?.resetToken ?? ''
   const { staggerAnim } = useStaggerAnimation()
 
   const { control, handleSubmit, reset } = useForm({
@@ -29,17 +28,21 @@ export default function ResetPasswordView ({ navigation, route }) {
     defaultValues: { password: '', confirmPassword: '' }
   })
 
+  const resetPassword = useResetPassword()
+
+  const errorMessage = resolveErrorMessage(resetPassword.error, t, AUTH_ERROR_KEYS.resetPassword)
+
   useFocusEffect(
     useCallback(() => {
-      return () => {
-        reset()
-      }
+      return () => { reset() }
     }, [reset])
   )
 
-  const submitHandler = handleSubmit((formData) => {
-    console.log('ResetPassword submit', { password: formData.password, email })
-    navigation.navigate('LogIn')
+  const submitHandler = handleSubmit(async ({ password }) => {
+    try {
+      await resetPassword.mutateAsync({ resetToken, password })
+      navigation.navigate('LogIn')
+    } catch {}
   })
 
   return (
@@ -54,7 +57,6 @@ export default function ResetPasswordView ({ navigation, route }) {
         >
           <BackArrowSVG color={theme.appBar.primary} />
         </TouchableOpacity>
-
         <StyledText style={styles.title}>{t('resetPassword.title')}</StyledText>
         <StyledText style={styles.subtitle}>{t('resetPassword.subtitle')}</StyledText>
       </Animated.View>
@@ -86,9 +88,13 @@ export default function ResetPasswordView ({ navigation, route }) {
       </Animated.View>
 
       <Animated.View style={[styles.footerSection, section(staggerAnim, 3)]}>
+        {errorMessage && (
+          <StyledText style={styles.errorText}>{errorMessage}</StyledText>
+        )}
         <StyledTouchableHighlight
           title={t('resetPassword.actions.submit')}
           onPress={submitHandler}
+          disabled={resetPassword.isPending}
           accessibilityLabel={t('resetPassword.actions.submit')}
           accessibilityHint='Submit your new password to complete the reset'
         />
@@ -105,39 +111,13 @@ export default function ResetPasswordView ({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-  scrollContent: {
-    paddingBottom: 40
-  },
-  headerSection: {
-    marginBottom: 40,
-    marginTop: 8
-  },
-  backButton: {
-    marginBottom: 28,
-    alignSelf: 'flex-start',
-    padding: 4
-  },
-  title: {
-    fontSize: theme.fontSizes.title,
-    fontWeight: 'bold',
-    color: theme.colors.textPrimary,
-    marginBottom: 10
-  },
-  subtitle: {
-    fontSize: theme.fontSizes.body,
-    color: theme.colors.textSecondary,
-    lineHeight: 22
-  },
-  inputSection: {
-    marginBottom: 8
-  },
-  footerSection: {
-    marginTop: 16,
-    gap: 12
-  },
-  backToLoginLink: {
-    alignSelf: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 4
-  }
+  scrollContent: { paddingBottom: 40 },
+  headerSection: { marginBottom: 40, marginTop: 8 },
+  backButton: { marginBottom: 28, alignSelf: 'flex-start', padding: 4 },
+  title: { fontSize: theme.fontSizes.title, fontWeight: 'bold', color: theme.colors.textPrimary, marginBottom: 10 },
+  subtitle: { fontSize: theme.fontSizes.body, color: theme.colors.textSecondary, lineHeight: 22 },
+  inputSection: { marginBottom: 8 },
+  errorText: { fontSize: theme.fontSizes.sub, color: theme.colors.danger, marginBottom: 8 },
+  footerSection: { marginTop: 16, gap: 12 },
+  backToLoginLink: { alignSelf: 'center', paddingVertical: 10, paddingHorizontal: 4 }
 })

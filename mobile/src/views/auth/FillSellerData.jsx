@@ -13,6 +13,9 @@ import StyledTouchableHighlight from '../../components/StyledTouchableHighlight'
 import PhoneInput from '../../components/PhoneInput'
 import TextAreaInput from '../../components/TextAreaInput'
 import ScheduleInput from '../../components/ScheduleInput'
+import { useUpdateSellerProfile } from '../../hooks/useProfile'
+import { resolveErrorMessage } from '../../utils/errorMessage'
+import { AUTH_ERROR_KEYS } from '../../utils/constants'
 
 export default function FillSellerDataView ({ navigation }) {
   const { t } = useTranslation()
@@ -32,9 +35,19 @@ export default function FillSellerDataView ({ navigation }) {
     }
   })
 
-  const submitHandler = handleSubmit((formData) => {
-    console.log('FillSellerData submit', formData)
-    navigation.navigate('Home')
+  const updateProfile = useUpdateSellerProfile()
+
+  const errorMessage = resolveErrorMessage(updateProfile.error, t, AUTH_ERROR_KEYS.fillSellerData)
+
+  const submitHandler = handleSubmit(async (formData) => {
+    const payload = { ...formData }
+    if (!payload.companyDescription) delete payload.companyDescription
+    if (!payload.address) delete payload.address
+    if (!payload.hoursOfOperation) delete payload.hoursOfOperation
+    try {
+      await updateProfile.mutateAsync(payload)
+      navigation.reset({ index: 0, routes: [{ name: 'Home' }] })
+    } catch {}
   })
 
   return (
@@ -113,9 +126,13 @@ export default function FillSellerDataView ({ navigation }) {
       </Animated.View>
 
       <Animated.View style={[styles.submitSection, section(staggerAnim, 3)]}>
+        {errorMessage && (
+          <StyledText style={styles.errorText}>{errorMessage}</StyledText>
+        )}
         <StyledTouchableHighlight
           title={t('fillSellerData.actions.submit')}
           onPress={submitHandler}
+          disabled={updateProfile.isPending}
           accessibilityLabel={t('fillSellerData.actions.submit')}
           accessibilityHint='Save your business information and continue'
         />
@@ -125,27 +142,12 @@ export default function FillSellerDataView ({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  scrollContent: {
-    paddingBottom: 40
-  },
-  headerWrapper: {
-    marginBottom: 40
-  },
-  titleSection: {
-    marginBottom: 28
-  },
-  title: {
-    fontSize: theme.fontSizes.title,
-    fontWeight: 'bold',
-    color: theme.colors.textPrimary
-  },
-  fieldGroup: {
-    marginBottom: 4
-  },
-  fieldGroupSpaced: {
-    marginTop: 16
-  },
-  submitSection: {
-    marginTop: 24
-  }
+  scrollContent: { paddingBottom: 40 },
+  headerWrapper: { marginBottom: 40 },
+  titleSection: { marginBottom: 28 },
+  title: { fontSize: theme.fontSizes.title, fontWeight: 'bold', color: theme.colors.textPrimary },
+  fieldGroup: { marginBottom: 4 },
+  fieldGroupSpaced: { marginTop: 16 },
+  submitSection: { marginTop: 24 },
+  errorText: { fontSize: theme.fontSizes.sub, color: theme.colors.danger, marginBottom: 8 }
 })

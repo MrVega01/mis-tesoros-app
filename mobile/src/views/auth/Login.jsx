@@ -1,22 +1,32 @@
+import { useTranslation } from 'react-i18next'
 import AuthScreenLayout from '../../components/AuthScreenLayout'
 import LoginForm from '../../components/LoginForm'
 import LoginFooter from '../../components/LoginFooter'
 import useAuthScreen from '../../hooks/useAuthScreen'
 import { createLoginSchema } from '../../schemas/login'
+import { useLogin, useResendCode } from '../../hooks/useAuth'
+import { resolveErrorMessage } from '../../utils/errorMessage'
+import { AUTH_ERROR_KEYS, RESEND_CODE_TYPE } from '../../utils/constants'
 
 export default function LoginView ({ navigation }) {
-  const {
-    control,
-    handleSubmit,
-    isSeller,
-    handleRoleChange,
-    titleOpacity,
-    staggerAnim
-  } = useAuthScreen(createLoginSchema)
+  const { t } = useTranslation()
+  const { control, handleSubmit, isSeller, handleRoleChange, titleOpacity, staggerAnim } = useAuthScreen(createLoginSchema)
 
-  const submitHandler = handleSubmit((formData) => {
-    console.log('Login submit', { ...formData, isSeller })
-    navigation.navigate('Home')
+  const login = useLogin()
+  const resendCode = useResendCode()
+
+  const errorMessage = resolveErrorMessage(login.error, t, AUTH_ERROR_KEYS.login)
+
+  const submitHandler = handleSubmit(async ({ email, password }) => {
+    try {
+      await login.mutateAsync({ email, password })
+      navigation.reset({ index: 0, routes: [{ name: 'Home' }] })
+    } catch (err) {
+      if (err?.status === 403) {
+        resendCode.mutate({ email, type: RESEND_CODE_TYPE.EMAIL_CONFIRMATION })
+        navigation.navigate('VerifySeller', { email })
+      }
+    }
   })
 
   return (
@@ -30,6 +40,8 @@ export default function LoginView ({ navigation }) {
           isSeller={isSeller}
           titleOpacity={titleOpacity}
           onSubmit={submitHandler}
+          loading={login.isPending}
+          errorMessage={errorMessage}
         />
       }
       footer={

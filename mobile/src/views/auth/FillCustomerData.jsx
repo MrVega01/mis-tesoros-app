@@ -11,6 +11,9 @@ import StyledText from '../../components/StyledText'
 import StyledTextInputWithLabel from '../../components/StyledTextInputWithLabel'
 import StyledTouchableHighlight from '../../components/StyledTouchableHighlight'
 import PhoneInput from '../../components/PhoneInput'
+import { useUpdateCustomerProfile } from '../../hooks/useProfile'
+import { resolveErrorMessage } from '../../utils/errorMessage'
+import { AUTH_ERROR_KEYS } from '../../utils/constants'
 
 export default function FillCustomerDataView ({ navigation }) {
   const { t } = useTranslation()
@@ -19,16 +22,18 @@ export default function FillCustomerDataView ({ navigation }) {
   const { control, handleSubmit } = useForm({
     mode: 'onSubmit',
     resolver: zodResolver(createFillCustomerDataSchema(t)),
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      contactNumber: ''
-    }
+    defaultValues: { firstName: '', lastName: '', contactNumber: '' }
   })
 
-  const submitHandler = handleSubmit((formData) => {
-    console.log('FillCustomerData submit', formData)
-    navigation.navigate('Home')
+  const updateProfile = useUpdateCustomerProfile()
+
+  const errorMessage = resolveErrorMessage(updateProfile.error, t, AUTH_ERROR_KEYS.fillCustomerData)
+
+  const submitHandler = handleSubmit(async (formData) => {
+    try {
+      await updateProfile.mutateAsync(formData)
+      navigation.reset({ index: 0, routes: [{ name: 'Home' }] })
+    } catch {}
   })
 
   return (
@@ -70,9 +75,13 @@ export default function FillCustomerDataView ({ navigation }) {
       </Animated.View>
 
       <Animated.View style={[styles.submitSection, section(staggerAnim, 3)]}>
+        {errorMessage && (
+          <StyledText style={styles.errorText}>{errorMessage}</StyledText>
+        )}
         <StyledTouchableHighlight
           title={t('fillCustomerData.actions.submit')}
           onPress={submitHandler}
+          disabled={updateProfile.isPending}
           accessibilityLabel={t('fillCustomerData.actions.submit')}
           accessibilityHint='Save your information and continue'
         />
@@ -82,21 +91,10 @@ export default function FillCustomerDataView ({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  scrollContent: {
-    paddingBottom: 40
-  },
-  headerWrapper: {
-    marginBottom: 40
-  },
-  titleSection: {
-    marginBottom: 28
-  },
-  title: {
-    fontSize: theme.fontSizes.title,
-    fontWeight: 'bold',
-    color: theme.colors.textPrimary
-  },
-  submitSection: {
-    marginTop: 24
-  }
+  scrollContent: { paddingBottom: 40 },
+  headerWrapper: { marginBottom: 40 },
+  titleSection: { marginBottom: 28 },
+  title: { fontSize: theme.fontSizes.title, fontWeight: 'bold', color: theme.colors.textPrimary },
+  submitSection: { marginTop: 24 },
+  errorText: { fontSize: theme.fontSizes.sub, color: theme.colors.danger, marginBottom: 8 }
 })
