@@ -1,5 +1,25 @@
 export const API_URL = process.env.EXPO_PUBLIC_API_URL
 
+export const USER_ROLE = {
+  SELLER: 'SELLER',
+  CUSTOMER: 'CUSTOMER'
+}
+
+export const RESEND_CODE_TYPE = {
+  EMAIL_CONFIRMATION: 'EMAIL_CONFIRMATION',
+  PASSWORD_RESET: 'PASSWORD_RESET'
+}
+
+export const AUTH_ERROR_KEYS = {
+  login: { 401: 'login.errors.invalidCredentials', 403: 'login.errors.emailUnverified' },
+  signUp: { 409: 'signUp.errors.emailTaken' },
+  verifySeller: { 400: 'codeSent.errors.invalidCode' },
+  verifyCode: { 400: 'verifyCode.errors.invalidCode' },
+  resetPassword: { 400: 'resetPassword.errors.tokenExpired' },
+  fillCustomerData: {},
+  fillSellerData: {}
+}
+
 export const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
 
 export const COUNTRY_CODES = [
