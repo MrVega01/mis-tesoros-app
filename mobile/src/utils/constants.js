@@ -1,16 +1,14 @@
+import { UserRole, VerificationCodeType } from '@mis-tesoros/contract'
+
 export const API_URL = process.env.EXPO_PUBLIC_API_URL
 
 export const ONBOARDING_SEEN_KEY = 'onboarding.seen'
 
-export const USER_ROLE = {
-  SELLER: 'SELLER',
-  CUSTOMER: 'CUSTOMER'
-}
+// Re-exported from the shared contract so the API and mobile agree on one set
+// of role / verification-code values. See packages/contract.
+export const USER_ROLE = UserRole
 
-export const RESEND_CODE_TYPE = {
-  EMAIL_CONFIRMATION: 'EMAIL_CONFIRMATION',
-  PASSWORD_RESET: 'PASSWORD_RESET'
-}
+export const RESEND_CODE_TYPE = VerificationCodeType
 
 export const AUTH_ERROR_KEYS = {
   login: { 401: 'login.errors.invalidCredentials', 403: 'login.errors.emailUnverified' },
