@@ -16,27 +16,37 @@ import VerifySellerView from './src/views/auth/VerifySeller'
 import ResetPasswordView from './src/views/auth/ResetPassword'
 import FillSellerDataView from './src/views/auth/FillSellerData'
 import FillCustomerDataView from './src/views/auth/FillCustomerData'
+import OnboardingView from './src/views/auth/Onboarding'
 import BootSplash from './src/components/BootSplash'
 import { useI18n } from './src/hooks/useI18n'
 import useAuthState from './src/hooks/useAuthState'
 import useAuthSession from './src/hooks/useAuthSession'
+import useOnboarding from './src/hooks/useOnboarding'
 import { useEffect } from 'react'
 import { STATUS } from './src/utils/authConstants'
 
 const Stack = createStackNavigator()
 
+function resolveInitialRoute (status, hasSeenOnboarding) {
+  if (status === STATUS.AUTHENTICATED) return 'Home'
+  if (!hasSeenOnboarding) return 'Onboarding'
+  return 'LogIn'
+}
+
 function RootNavigator () {
   const { status } = useAuthState()
   const { restoreSession } = useAuthSession()
+  const { hasSeenOnboarding } = useOnboarding()
 
   useEffect(() => {
     restoreSession()
   }, [])
 
-  if (status === STATUS.LOADING) return <BootSplash />
+  if (status === STATUS.LOADING || hasSeenOnboarding === null) return <BootSplash />
 
   return (
-    <Stack.Navigator initialRouteName={status === STATUS.AUTHENTICATED ? 'Home' : 'LogIn'}>
+    <Stack.Navigator initialRouteName={resolveInitialRoute(status, hasSeenOnboarding)}>
+      <Stack.Screen name='Onboarding' component={OnboardingView} options={{ headerShown: false }} />
       <Stack.Screen name='LogIn' component={LoginView} options={{ headerShown: false }} />
       <Stack.Screen name='SignUp' component={SignUpView} options={{ headerShown: false }} />
       <Stack.Screen name='VerifySeller' component={VerifySellerView} options={{ headerShown: false }} />

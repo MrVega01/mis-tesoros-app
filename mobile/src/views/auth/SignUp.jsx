@@ -8,9 +8,10 @@ import { useRegister } from '../../hooks/useAuth'
 import { resolveErrorMessage } from '../../utils/errorMessage'
 import { AUTH_ERROR_KEYS, USER_ROLE } from '../../utils/constants'
 
-export default function SignUpView ({ navigation }) {
+export default function SignUpView ({ navigation, route }) {
   const { t } = useTranslation()
-  const { control, handleSubmit, isSeller, handleRoleChange, titleOpacity, staggerAnim } = useAuthScreen(createSignUpSchema)
+  const initialIsSeller = route.params?.role === USER_ROLE.SELLER
+  const { control, handleSubmit, isSeller, handleRoleChange, titleOpacity, staggerAnim } = useAuthScreen(createSignUpSchema, initialIsSeller)
 
   const register = useRegister()
 

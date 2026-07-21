@@ -5,9 +5,9 @@ import { useTranslation } from 'react-i18next'
 import { useFocusEffect } from '@react-navigation/native'
 import useStaggerAnimation from './useStaggerAnimation'
 
-export default function useAuthScreen (createSchema) {
+export default function useAuthScreen (createSchema, initialIsSeller = false) {
   const { t } = useTranslation()
-  const [isSeller, setIsSeller] = useState(false)
+  const [isSeller, setIsSeller] = useState(initialIsSeller)
 
   const { control, handleSubmit, reset } = useForm({
     mode: 'onSubmit',
@@ -22,9 +22,9 @@ export default function useAuthScreen (createSchema) {
     useCallback(() => {
       return () => {
         reset()
-        setIsSeller(false)
+        setIsSeller(initialIsSeller)
       }
-    }, [reset])
+    }, [reset, initialIsSeller])
   )
 
   const { staggerAnim, titleOpacity, animateTitleChange } = useStaggerAnimation()

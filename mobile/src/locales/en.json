@@ -9,6 +9,49 @@
       "unknown": "Something went wrong. Please try again."
     }
   },
+  "onboarding": {
+    "intro": {
+      "title": "Welcome to Mis Tesoros",
+      "subtitle": "Where buyers and sellers come together.",
+      "features": {
+        "discover": {
+          "title": "Discover unique products",
+          "description": "Explore a catalog full of treasures."
+        },
+        "trade": {
+          "title": "Buy and sell with ease",
+          "description": "List your products or find what you're looking for."
+        },
+        "manage": {
+          "title": "Manage your business",
+          "description": "Control sales, categories and prices in one place."
+        }
+      }
+    },
+    "role": {
+      "title": "How do you want to use the app?",
+      "subtitle": "Choose your account type to get started.",
+      "customer": {
+        "title": "Customer",
+        "description": "I want to discover and buy products."
+      },
+      "seller": {
+        "title": "Seller",
+        "description": "I want to list and sell my products."
+      }
+    },
+    "auth": {
+      "title": "You're one step away",
+      "subtitle": "Create a new account or sign in if you already have one.",
+      "createAccount": "Create account",
+      "login": "I already have an account"
+    },
+    "actions": {
+      "next": "Next",
+      "back": "Back",
+      "skip": "Skip"
+    }
+  },
   "login": {
     "roles": {
       "client": "Client",

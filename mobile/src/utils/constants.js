@@ -1,5 +1,7 @@
 export const API_URL = process.env.EXPO_PUBLIC_API_URL
 
+export const ONBOARDING_SEEN_KEY = 'onboarding.seen'
+
 export const USER_ROLE = {
   SELLER: 'SELLER',
   CUSTOMER: 'CUSTOMER'

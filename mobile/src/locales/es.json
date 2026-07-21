@@ -9,6 +9,49 @@
       "unknown": "Ocurrió un error. Intenta de nuevo."
     }
   },
+  "onboarding": {
+    "intro": {
+      "title": "Bienvenido a Mis Tesoros",
+      "subtitle": "El lugar donde compradores y vendedores se encuentran.",
+      "features": {
+        "discover": {
+          "title": "Descubre productos únicos",
+          "description": "Explora un catálogo lleno de tesoros."
+        },
+        "trade": {
+          "title": "Compra y vende fácil",
+          "description": "Publica tus productos o encuentra lo que buscas."
+        },
+        "manage": {
+          "title": "Gestiona tu negocio",
+          "description": "Controla ventas, categorías y precios en un solo lugar."
+        }
+      }
+    },
+    "role": {
+      "title": "¿Cómo quieres usar la app?",
+      "subtitle": "Elige tu tipo de cuenta para empezar.",
+      "customer": {
+        "title": "Cliente",
+        "description": "Quiero descubrir y comprar productos."
+      },
+      "seller": {
+        "title": "Vendedor",
+        "description": "Quiero publicar y vender mis productos."
+      }
+    },
+    "auth": {
+      "title": "Estás a un paso",
+      "subtitle": "Crea una cuenta nueva o ingresa si ya tienes una.",
+      "createAccount": "Crear cuenta",
+      "login": "Ya tengo cuenta"
+    },
+    "actions": {
+      "next": "Siguiente",
+      "back": "Atrás",
+      "skip": "Omitir"
+    }
+  },
   "login": {
     "roles": {
       "client": "Cliente",
