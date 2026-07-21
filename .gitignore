@@ -29,5 +29,8 @@ api/prisma/generated/
 mobile/.env
 api/.env
 
+# Claude Code
+.claude/
+
 # macOS
 .DS_Store
