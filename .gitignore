@@ -24,6 +24,9 @@ npm-debug.*
 api/dist/
 api/prisma/generated/
 
+# Workspace packages (build output)
+packages/*/dist/
+
 # Environment variables
 .env
 mobile/.env
