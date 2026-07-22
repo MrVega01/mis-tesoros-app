@@ -1,0 +1,24 @@
+# Build context is the repo root. Keep images lean and reproducible: never copy
+# host deps/build output (they are installed/built inside the image).
+
+# Dependencies & build output
+**/node_modules
+**/dist
+
+# Mobile app is NOT dockerized — exclude the whole folder, but keep its
+# package.json so `pnpm install --frozen-lockfile` can resolve the workspace.
+# (--filter @mis-tesoros/api... ensures mobile's deps are never installed.)
+mobile/*
+!mobile/package.json
+
+# Env & secrets (runtime env comes from docker-compose env_file)
+**/.env
+
+# VCS & tooling
+.git
+.gitignore
+.claude
+
+# Logs & OS cruft
+**/*.log
+**/.DS_Store

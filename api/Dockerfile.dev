@@ -1,9 +1,23 @@
+# Workspace-aware dev image. Build context is the REPO ROOT (see docker-compose.yml).
+# Runs the API in watch mode; api/src is bind-mounted over /repo/api/src by compose.
 FROM node:20-alpine
 RUN npm install -g pnpm@10
-WORKDIR /app
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
-COPY . .
+WORKDIR /repo
+
+# Manifests + the (tiny) contract source (copied before install so its `prepare`
+# tsc build runs during install). mobile/package.json is required only so pnpm can
+# resolve the workspace against the frozen lockfile (its deps are not installed).
+COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
+COPY packages/contract ./packages/contract
+COPY api/package.json ./api/
+COPY mobile/package.json ./mobile/
+
+# Install deps for the API and its workspace dependencies (contract) only.
+RUN pnpm install --frozen-lockfile --filter @mis-tesoros/api...
+
+COPY api ./api
+
+WORKDIR /repo/api
 ARG DATABASE_URL=postgresql://x:x@localhost/x
 ENV DATABASE_URL=${DATABASE_URL}
 RUN pnpm exec prisma generate --schema=prisma/schema.prisma
