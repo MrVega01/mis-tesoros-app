@@ -1,5 +1,4 @@
 import { View, StyleSheet } from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import StyledText from './StyledText'
 import StyledTextInput from './StyledTextInput'
 import { theme } from '../theme'
@@ -7,10 +6,7 @@ import { theme } from '../theme'
 export default function TaxForm ({ taxState }) {
   const [tax, setTax] = taxState
 
-  const handlerChangeText = (name, value) => {
-    setTax(Number(value))
-    AsyncStorage.setItem('tax', value)
-  }
+  const handlerChangeText = (name, value) => setTax(value)
 
   return (
     <View style={styles.container}>

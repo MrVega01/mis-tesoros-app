@@ -1,9 +1,9 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { Alert, FlatList } from 'react-native'
 import { Product } from './Product'
 import useProducts from '../hooks/useProducts'
 import StyledText from './StyledText'
-import { GlobalContext } from '../context/global'
+import { useTaxRate } from '../hooks/useTax'
 import { useIsFocused } from '@react-navigation/native'
 import { useDeleteProduct } from '../hooks/useDeleteProduct'
 import Dialog from 'react-native-dialog'
@@ -12,8 +12,7 @@ import useUpdateProduct from '../hooks/useUpdateProduct'
 export default function ProductList () {
   const [productToRestock, setProductToRestock] = useState(null)
   const [newQuantity, setNewQuantity] = useState()
-  const { state } = useContext(GlobalContext)
-  const { tax } = state
+  const tax = useTaxRate()
   const focused = useIsFocused()
   const { products, loading, refresh } = useProducts([focused])
   const { updateProduct } = useUpdateProduct()

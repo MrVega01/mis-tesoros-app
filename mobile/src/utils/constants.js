@@ -4,6 +4,8 @@ export const API_URL = process.env.EXPO_PUBLIC_API_URL
 
 export const ONBOARDING_SEEN_KEY = 'onboarding.seen'
 
+export const TAX_KEY = 'tax'
+
 // Re-exported from the shared contract so the API and mobile agree on one set
 // of role / verification-code values. See packages/contract.
 export const USER_ROLE = UserRole

@@ -1,12 +1,10 @@
-import { useContext } from 'react'
 import { FlatList, View } from 'react-native'
 import StyledText from './StyledText'
-import { GlobalContext } from '../context/global'
+import { useTaxRate } from '../hooks/useTax'
 import { ProductSale } from './ProductSale'
 
 export default function ProductSaleList ({ quantityList, setQuantityList, useProducts }) {
-  const { state } = useContext(GlobalContext)
-  const { tax } = state
+  const tax = useTaxRate()
   const { products, loading } = useProducts
 
   return (

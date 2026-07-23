@@ -1,13 +1,12 @@
-import { useContext } from 'react'
 import { StyleSheet, View } from 'react-native'
 import Constants from 'expo-constants'
 import TaxForm from '../../components/TaxForm'
 import { theme } from '../../theme'
-import { GlobalContext } from '../../context/global'
+import { useTaxRate, useTaxActions } from '../../hooks/useTax'
 
 export default function TaxView () {
-  const { state, updateTax } = useContext(GlobalContext)
-  const { tax } = state
+  const tax = useTaxRate()
+  const { updateTax } = useTaxActions()
 
   return (
     <View style={styles.container}>

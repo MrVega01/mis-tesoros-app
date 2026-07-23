@@ -2,10 +2,10 @@ import { FlatList, StyleSheet, View } from 'react-native'
 import Constants from 'expo-constants'
 import { theme } from '../../theme'
 import ProductSaleList from '../../components/ProductSaleList'
-import { useContext, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import StyledTouchableHighlight from '../../components/StyledTouchableHighlight'
 import StyledText from '../../components/StyledText'
-import { GlobalContext } from '../../context/global'
+import { useTaxRate } from '../../hooks/useTax'
 import { useIsFocused } from '@react-navigation/native'
 import useProducts from '../../hooks/useProducts'
 import useUpdateProduct from '../../hooks/useUpdateProduct'
@@ -15,8 +15,7 @@ export default function CreateSaleView ({ navigation }) {
   const focused = useIsFocused()
   const products = useProducts([focused])
   const { registerProductSale } = useUpdateProduct()
-  const { state } = useContext(GlobalContext)
-  const { tax } = state
+  const tax = useTaxRate()
 
   const handleChangeQuantity = (productWithQuantity) => {
     setQuantityList(prev => ({
