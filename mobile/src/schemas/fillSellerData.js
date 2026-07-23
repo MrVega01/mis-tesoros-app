@@ -3,6 +3,7 @@ import { z } from 'zod'
 export const createFillSellerDataSchema = (t) => z.object({
   companyName: z.string().min(1, t('fillSellerData.validation.companyNameRequired')),
   sellerName: z.string().min(1, t('fillSellerData.validation.sellerNameRequired')),
+  sellerLastName: z.string().min(1, t('fillSellerData.validation.sellerLastNameRequired')),
   companyType: z.string().min(1, t('fillSellerData.validation.companyTypeRequired')),
   companyDescription: z.string().optional(),
   address: z.string().optional(),

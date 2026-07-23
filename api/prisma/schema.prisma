@@ -42,6 +42,7 @@ model SellerProfile {
   id                 String  @id @default(uuid())
   companyName        String
   sellerName         String
+  sellerLastName     String
   companyType        String
   companyDescription String?
   address            String?

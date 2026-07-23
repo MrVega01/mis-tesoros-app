@@ -140,6 +140,7 @@
     "fields": {
       "companyName": "Company name",
       "sellerName": "Seller name",
+      "sellerLastName": "Seller last name",
       "companyType": "Type of company",
       "companyDescription": "Description (optional)",
       "address": "Address (optional)",
@@ -173,6 +174,7 @@
     "validation": {
       "companyNameRequired": "Company name is required",
       "sellerNameRequired": "Seller name is required",
+      "sellerLastNameRequired": "Seller last name is required",
       "companyTypeRequired": "Type of company is required",
       "contactNumberRequired": "Contact number is required",
       "contactNumberInvalid": "Enter a valid phone number",

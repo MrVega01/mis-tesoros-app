@@ -64,10 +64,15 @@ export class UpdateSellerProfileDto {
   @MinLength(1)
   companyName: string
 
-  @ApiProperty({ example: 'Juan Pérez' })
+  @ApiProperty({ example: 'Juan' })
   @IsString()
   @MinLength(1)
   sellerName: string
+
+  @ApiProperty({ example: 'Pérez' })
+  @IsString()
+  @MinLength(1)
+  sellerLastName: string
 
   @ApiProperty({ example: 'Retail', description: 'Type or category of the business' })
   @IsString()

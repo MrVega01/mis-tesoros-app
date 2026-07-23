@@ -27,6 +27,7 @@ export default function FillSellerDataView ({ navigation }) {
     defaultValues: {
       companyName: '',
       sellerName: '',
+      sellerLastName: '',
       companyType: '',
       companyDescription: '',
       address: '',
@@ -81,6 +82,16 @@ export default function FillSellerDataView ({ navigation }) {
             autoCorrect={false}
             accessibilityLabel={t('fillSellerData.fields.sellerName')}
             accessibilityHint='Enter the seller name'
+          />
+          <StyledTextInputWithLabel
+            label={t('fillSellerData.fields.sellerLastName')}
+            control={control}
+            name='sellerLastName'
+            placeholder={t('fillSellerData.fields.sellerLastName')}
+            autoCapitalize='words'
+            autoCorrect={false}
+            accessibilityLabel={t('fillSellerData.fields.sellerLastName')}
+            accessibilityHint='Enter the seller last name'
           />
           <StyledTextInputWithLabel
             label={t('fillSellerData.fields.companyType')}
