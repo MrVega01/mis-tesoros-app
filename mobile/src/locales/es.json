@@ -219,5 +219,16 @@
       "confirmPasswordRequired": "Por favor, confirma tu contraseña",
       "passwordsMustMatch": "Las contraseñas no coinciden"
     }
+  },
+  "account": {
+    "tabLabel": "Cuenta",
+    "title": "Mi cuenta",
+    "email": "Correo",
+    "role": "Tipo de cuenta",
+    "roles": {
+      "seller": "Vendedor",
+      "customer": "Cliente"
+    },
+    "logout": "Cerrar sesión"
   }
 }
