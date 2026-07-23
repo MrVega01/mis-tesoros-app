@@ -230,5 +230,16 @@
       "customer": "Customer"
     },
     "logout": "Log out"
+  },
+  "tabs": {
+    "products": "Products",
+    "tax": "Exchange rate",
+    "messages": "Messages",
+    "home": "Home"
+  },
+  "customer": {
+    "home": {
+      "placeholder": "Coming soon"
+    }
   }
 }

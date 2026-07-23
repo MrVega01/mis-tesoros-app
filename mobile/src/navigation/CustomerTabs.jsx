@@ -2,20 +2,18 @@ import { CommonActions } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useTranslation } from 'react-i18next'
 import { theme } from '../theme'
-import MoneySVG from '../img/Money'
-import StoreSVG from '../img/Store'
+import ShoppingBagSVG from '../img/ShoppingBag'
 import SettingsSVG from '../img/Settings'
 import MessageSVG from '../img/Message'
 import { StyleSheet } from 'react-native'
 import { BottomNavigation } from 'react-native-paper'
-import ProductsView from '../views/core/Products'
+import CustomerHomeView from '../views/customer/Home'
 import Messages from '../views/core/Messages'
-import TaxView from '../views/company/Tax'
 import Settings from '../views/core/Settings'
 
 const Tab = createBottomTabNavigator()
 
-export default function Home () {
+export default function CustomerTabs () {
   const { t } = useTranslation()
   return (
     <Tab.Navigator
@@ -66,24 +64,13 @@ export default function Home () {
       )}
     >
       <Tab.Screen
-        name='Productos'
-        component={ProductsView}
+        name='Inicio'
+        component={CustomerHomeView}
         options={{
           headerShown: false,
-          tabBarLabel: 'Productos',
+          tabBarLabel: t('tabs.home'),
           tabBarIcon: ({ color }) => (
-            <StoreSVG color={color} />
-          )
-        }}
-      />
-      <Tab.Screen
-        name='Tasa'
-        component={TaxView}
-        options={{
-          headerShown: false,
-          tabBarLabel: 'Tasa',
-          tabBarIcon: ({ color }) => (
-            <MoneySVG color={color} />
+            <ShoppingBagSVG color={color} />
           )
         }}
       />
@@ -92,7 +79,7 @@ export default function Home () {
         component={Messages}
         options={{
           headerShown: false,
-          tabBarLabel: 'Mensajes',
+          tabBarLabel: t('tabs.messages'),
           tabBarIcon: ({ color }) => (
             <MessageSVG color={color} />
           )

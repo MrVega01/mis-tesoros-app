@@ -230,5 +230,16 @@
       "customer": "Cliente"
     },
     "logout": "Cerrar sesión"
+  },
+  "tabs": {
+    "products": "Productos",
+    "tax": "Tasa",
+    "messages": "Mensajes",
+    "home": "Inicio"
+  },
+  "customer": {
+    "home": {
+      "placeholder": "Próximamente"
+    }
   }
 }
