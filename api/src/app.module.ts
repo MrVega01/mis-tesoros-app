@@ -8,6 +8,8 @@ import { RedisModule } from '@core/redis/redis.module'
 import { MailModule } from '@core/mail/mail.module'
 import { AuthModule } from '@modules/auth/auth.module'
 import { UserModule } from '@modules/user/user.module'
+import { CategoryModule } from '@modules/category/category.module'
+import { ProductModule } from '@modules/product/product.module'
 import { JwtAuthGuard } from '@common/guards/jwt-auth.guard'
 
 @Module({
@@ -19,7 +21,9 @@ import { JwtAuthGuard } from '@common/guards/jwt-auth.guard'
     RedisModule,
     MailModule,
     AuthModule,
-    UserModule
+    UserModule,
+    CategoryModule,
+    ProductModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: JwtAuthGuard },
