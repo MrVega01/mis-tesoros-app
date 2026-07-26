@@ -1,4 +1,4 @@
-import { IsOptional, IsString, Matches, MinLength, ValidateNested } from 'class-validator'
+import { IsNumber, IsOptional, IsString, Matches, Min, MinLength, ValidateNested } from 'class-validator'
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
 
@@ -99,4 +99,10 @@ export class UpdateSellerProfileDto {
   @IsString()
   @Matches(/^\+[1-9]\d{0,3}\s?\d{6,14}$/)
   contactNumber: string
+
+  @ApiPropertyOptional({ example: 36.5, description: 'USD → bolívar rate this seller prices with' })
+  @IsOptional()
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
+  customTaxRate?: number
 }

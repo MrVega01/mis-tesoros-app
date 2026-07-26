@@ -3,13 +3,10 @@ import {
   Injectable,
   NotFoundException
 } from '@nestjs/common'
-import { Prisma } from '@prisma/client'
 import { PrismaService } from '@core/prisma/prisma.service'
+import { PRISMA_ERROR, isPrismaError } from '@common/prisma-errors'
 import { CreateCategoryDto } from './dto/create-category.dto'
 import { UpdateCategoryDto } from './dto/update-category.dto'
-
-// Prisma error code for a unique-constraint violation.
-const UNIQUE_VIOLATION = 'P2002'
 
 @Injectable()
 export class CategoryService {
@@ -62,10 +59,7 @@ export class CategoryService {
   }
 
   private translateUniqueViolation(error: unknown) {
-    if (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === UNIQUE_VIOLATION
-    ) {
+    if (isPrismaError(error, PRISMA_ERROR.UNIQUE_VIOLATION)) {
       return new ConflictException('You already have a category with that name')
     }
     return error

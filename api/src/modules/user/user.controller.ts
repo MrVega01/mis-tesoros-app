@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Put } from '@nestjs/common'
+import { Body, Controller, Get, Patch, Put } from '@nestjs/common'
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { UserService } from './user.service'
 import { CurrentUser } from '@common/decorators/current-user.decorator'
 import { UpdateSellerProfileDto } from './dto/update-seller-profile.dto'
 import { UpdateCustomerProfileDto } from './dto/update-customer-profile.dto'
+import { UpdateTaxRateDto } from './dto/update-tax-rate.dto'
 
 @ApiTags('user')
 @ApiBearerAuth()
@@ -28,6 +29,18 @@ export class UserController {
     @Body() dto: UpdateSellerProfileDto
   ) {
     return this.user.updateSellerProfile(user.userId, user.role, dto)
+  }
+
+  @Patch('tax-rate')
+  @ApiOperation({ summary: 'Update the seller tax rate', description: 'Saves the USD → bolívar rate the seller prices with, without resending the whole profile. Requires SELLER role.' })
+  @ApiResponse({ status: 200, description: 'Tax rate saved.' })
+  @ApiResponse({ status: 403, description: 'Forbidden — user is not a SELLER.' })
+  @ApiResponse({ status: 404, description: 'Seller profile not created yet.' })
+  updateTaxRate (
+    @CurrentUser() user: { userId: string; role: any },
+    @Body() dto: UpdateTaxRateDto
+  ) {
+    return this.user.updateTaxRate(user.userId, user.role, dto)
   }
 
   @Put('customer-profile')

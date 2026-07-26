@@ -5,9 +5,11 @@ import {
 } from '@nestjs/common'
 import { PrismaService } from '@core/prisma/prisma.service'
 import { RedisService } from '@core/redis/redis.service'
+import { PRISMA_ERROR, isPrismaError } from '@common/prisma-errors'
 import { UserRole } from '@prisma/client'
 import { UpdateSellerProfileDto } from './dto/update-seller-profile.dto'
 import { UpdateCustomerProfileDto } from './dto/update-customer-profile.dto'
+import { UpdateTaxRateDto } from './dto/update-tax-rate.dto'
 
 @Injectable()
 export class UserService {
@@ -69,6 +71,32 @@ export class UserService {
 
     await this.redis.del(`user:${userId}`)
     return { message: 'Seller profile updated', profile }
+  }
+
+  // Separate from updateSellerProfile so the Tasa screen can save a rate
+  // without resending the whole company profile.
+  async updateTaxRate(userId: string, role: UserRole, dto: UpdateTaxRateDto) {
+    if (role !== UserRole.SELLER)
+      throw new ForbiddenException('Only sellers have a tax rate')
+
+    let profile: Awaited<ReturnType<typeof this.prisma.sellerProfile.update>>
+    try {
+      profile = await this.prisma.sellerProfile.update({
+        where: { userId },
+        data: { customTaxRate: dto.customTaxRate }
+      })
+    } catch (error) {
+      // The seller has not completed onboarding yet, so there is no row to
+      // hang a rate on. Upserting would create a profile with blank required
+      // fields, so refuse instead.
+      if (isPrismaError(error, PRISMA_ERROR.RECORD_NOT_FOUND)) {
+        throw new NotFoundException('Seller profile not found')
+      }
+      throw error
+    }
+
+    await this.redis.del(`user:${userId}`)
+    return { message: 'Tax rate updated', profile }
   }
 
   async updateCustomerProfile(

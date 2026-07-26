@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
 import { PrismaService } from '@core/prisma/prisma.service'
+import { PRISMA_ERROR, isPrismaError } from '@common/prisma-errors'
 import { CreateProductDto } from './dto/create-product.dto'
 import { UpdateProductDto } from './dto/update-product.dto'
 
@@ -28,7 +29,7 @@ export class ProductService {
 
   async findAll(sellerId: string) {
     const products = await this.prisma.product.findMany({
-      where: { sellerId },
+      where: { sellerId, archivedAt: null },
       include: productInclude,
       orderBy: { createdAt: 'desc' }
     })
@@ -37,7 +38,7 @@ export class ProductService {
 
   async findOne(sellerId: string, id: string) {
     const product = await this.prisma.product.findFirst({
-      where: { id, sellerId },
+      where: { id, sellerId, archivedAt: null },
       include: productInclude
     })
     if (!product) throw new NotFoundException('Product not found')
@@ -82,10 +83,34 @@ export class ProductService {
     return this.serialize(product)
   }
 
+  // A product that was never sold is deleted outright. One that appears in a
+  // sale is archived instead: SaleItem.productId is Restrict, and erasing the
+  // product would take its sales history with it.
   async remove(sellerId: string, id: string) {
     await this.findOne(sellerId, id)
-    await this.prisma.product.delete({ where: { id } })
+
+    const soldLines = await this.prisma.saleItem.count({ where: { productId: id } })
+    if (soldLines > 0) {
+      await this.archive(id)
+      return { message: 'Product deleted' }
+    }
+
+    try {
+      await this.prisma.product.delete({ where: { id } })
+    } catch (error) {
+      // A sale landed between the count and the delete; the FK stopped us, so
+      // fall back to archiving rather than failing the request.
+      if (!isPrismaError(error, PRISMA_ERROR.FOREIGN_KEY_VIOLATION)) throw error
+      await this.archive(id)
+    }
     return { message: 'Product deleted' }
+  }
+
+  private archive(id: string) {
+    return this.prisma.product.update({
+      where: { id },
+      data: { archivedAt: new Date() }
+    })
   }
 
   // A seller must not be able to attach someone else's category to a product.

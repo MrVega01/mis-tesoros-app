@@ -10,6 +10,7 @@ import { AuthModule } from '@modules/auth/auth.module'
 import { UserModule } from '@modules/user/user.module'
 import { CategoryModule } from '@modules/category/category.module'
 import { ProductModule } from '@modules/product/product.module'
+import { SaleModule } from '@modules/sale/sale.module'
 import { JwtAuthGuard } from '@common/guards/jwt-auth.guard'
 
 @Module({
@@ -23,7 +24,8 @@ import { JwtAuthGuard } from '@common/guards/jwt-auth.guard'
     AuthModule,
     UserModule,
     CategoryModule,
-    ProductModule
+    ProductModule,
+    SaleModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: JwtAuthGuard },

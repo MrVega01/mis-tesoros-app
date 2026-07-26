@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { BadRequestException, NotFoundException } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
 import { PrismaService } from '@core/prisma/prisma.service'
+import { PRISMA_ERROR } from '@common/prisma-errors'
 import { ProductService } from './product.service'
 
 // ─── Fixtures ─────────────────────────────────────────────────────────────────
@@ -21,11 +22,20 @@ function makeDbProduct(overrides: Record<string, any> = {}) {
     price: new Prisma.Decimal('12.50'),
     quantity: 3,
     categoryId: CATEGORY_ID,
+    archivedAt: null,
     createdAt: new Date('2026-01-01T00:00:00.000Z'),
     updatedAt: new Date('2026-01-01T00:00:00.000Z'),
     category: { id: CATEGORY_ID, name: 'Artesanía' },
     ...overrides
   }
+}
+
+// The FK violation Postgres raises when a SaleItem still points at the row.
+function makeForeignKeyError() {
+  return new Prisma.PrismaClientKnownRequestError(
+    'Foreign key constraint failed on the field: `sale_items_productId_fkey`',
+    { code: PRISMA_ERROR.FOREIGN_KEY_VIOLATION, clientVersion: 'test' }
+  )
 }
 
 // ─── Mock providers ───────────────────────────────────────────────────────────
@@ -40,6 +50,9 @@ const mockPrisma = {
   },
   category: {
     findFirst: jest.fn()
+  },
+  saleItem: {
+    count: jest.fn()
   }
 }
 
@@ -50,6 +63,8 @@ describe('ProductService', () => {
 
   beforeEach(async () => {
     jest.clearAllMocks()
+    // Nothing has been sold unless a test says otherwise.
+    mockPrisma.saleItem.count.mockResolvedValue(0)
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -71,7 +86,7 @@ describe('ProductService', () => {
 
       expect(mockPrisma.product.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
-          where: { sellerId: SELLER_ID },
+          where: { sellerId: SELLER_ID, archivedAt: null },
           orderBy: { createdAt: 'desc' }
         })
       )
@@ -114,7 +129,7 @@ describe('ProductService', () => {
 
       expect(mockPrisma.product.findFirst).toHaveBeenCalledWith(
         expect.objectContaining({
-          where: { id: PRODUCT_ID, sellerId: SELLER_ID }
+          where: { id: PRODUCT_ID, sellerId: SELLER_ID, archivedAt: null }
         })
       )
     })
@@ -136,7 +151,7 @@ describe('ProductService', () => {
       ).rejects.toThrow(NotFoundException)
       expect(mockPrisma.product.findFirst).toHaveBeenCalledWith(
         expect.objectContaining({
-          where: { id: PRODUCT_ID, sellerId: OTHER_SELLER_ID }
+          where: { id: PRODUCT_ID, sellerId: OTHER_SELLER_ID, archivedAt: null }
         })
       )
     })
@@ -316,7 +331,7 @@ describe('ProductService', () => {
 
       expect(mockPrisma.product.findFirst).toHaveBeenCalledWith(
         expect.objectContaining({
-          where: { id: PRODUCT_ID, sellerId: SELLER_ID }
+          where: { id: PRODUCT_ID, sellerId: SELLER_ID, archivedAt: null }
         })
       )
     })
@@ -423,7 +438,7 @@ describe('ProductService', () => {
 
       expect(mockPrisma.product.findFirst).toHaveBeenCalledWith(
         expect.objectContaining({
-          where: { id: PRODUCT_ID, sellerId: SELLER_ID }
+          where: { id: PRODUCT_ID, sellerId: SELLER_ID, archivedAt: null }
         })
       )
       expect(mockPrisma.product.delete).toHaveBeenCalledWith({
@@ -441,9 +456,95 @@ describe('ProductService', () => {
       expect(mockPrisma.product.delete).not.toHaveBeenCalled()
     })
 
+    it('really deletes a product that was never sold and never archives it', async () => {
+      mockPrisma.product.findFirst.mockResolvedValue(makeDbProduct())
+      mockPrisma.saleItem.count.mockResolvedValue(0)
+      mockPrisma.product.delete.mockResolvedValue(makeDbProduct())
+
+      await service.remove(SELLER_ID, PRODUCT_ID)
+
+      expect(mockPrisma.saleItem.count).toHaveBeenCalledWith({
+        where: { productId: PRODUCT_ID }
+      })
+      expect(mockPrisma.product.delete).toHaveBeenCalledTimes(1)
+      expect(mockPrisma.product.update).not.toHaveBeenCalled()
+    })
+
+    it('archives a product that appears in a sale instead of deleting it', async () => {
+      mockPrisma.product.findFirst.mockResolvedValue(makeDbProduct())
+      mockPrisma.saleItem.count.mockResolvedValue(2)
+      mockPrisma.product.update.mockResolvedValue(makeDbProduct())
+
+      const result = await service.remove(SELLER_ID, PRODUCT_ID)
+
+      expect(mockPrisma.product.delete).not.toHaveBeenCalled()
+      expect(mockPrisma.product.update).toHaveBeenCalledWith({
+        where: { id: PRODUCT_ID },
+        data: { archivedAt: expect.any(Date) }
+      })
+      // The caller cannot tell archiving from deletion — the product is gone
+      // from every read either way.
+      expect(result).toEqual({ message: 'Product deleted' })
+    })
+
+    it('does not count sale lines for a product owned by another seller', async () => {
+      mockPrisma.product.findFirst.mockResolvedValue(null)
+
+      await expect(service.remove(OTHER_SELLER_ID, PRODUCT_ID)).rejects.toThrow(
+        NotFoundException
+      )
+      expect(mockPrisma.saleItem.count).not.toHaveBeenCalled()
+      expect(mockPrisma.product.update).not.toHaveBeenCalled()
+    })
+
+    it('falls back to archiving when a sale lands between the count and the delete', async () => {
+      mockPrisma.product.findFirst.mockResolvedValue(makeDbProduct())
+      mockPrisma.saleItem.count.mockResolvedValue(0)
+      mockPrisma.product.delete.mockRejectedValue(makeForeignKeyError())
+      mockPrisma.product.update.mockResolvedValue(makeDbProduct())
+
+      const result = await service.remove(SELLER_ID, PRODUCT_ID)
+
+      expect(mockPrisma.product.delete).toHaveBeenCalledTimes(1)
+      expect(mockPrisma.product.update).toHaveBeenCalledWith({
+        where: { id: PRODUCT_ID },
+        data: { archivedAt: expect.any(Date) }
+      })
+      expect(result).toEqual({ message: 'Product deleted' })
+    })
+
     it('does not swallow database errors raised by the delete', async () => {
       mockPrisma.product.findFirst.mockResolvedValue(makeDbProduct())
+      mockPrisma.saleItem.count.mockResolvedValue(0)
       mockPrisma.product.delete.mockRejectedValue(new Error('db unavailable'))
+
+      await expect(service.remove(SELLER_ID, PRODUCT_ID)).rejects.toThrow(
+        'db unavailable'
+      )
+      // A non-FK failure is a real failure: nothing gets archived behind it.
+      expect(mockPrisma.product.update).not.toHaveBeenCalled()
+    })
+
+    it('propagates a Prisma error whose code is not a foreign-key violation', async () => {
+      mockPrisma.product.findFirst.mockResolvedValue(makeDbProduct())
+      mockPrisma.saleItem.count.mockResolvedValue(0)
+      mockPrisma.product.delete.mockRejectedValue(
+        new Prisma.PrismaClientKnownRequestError('Record not found', {
+          code: PRISMA_ERROR.RECORD_NOT_FOUND,
+          clientVersion: 'test'
+        })
+      )
+
+      await expect(service.remove(SELLER_ID, PRODUCT_ID)).rejects.toThrow(
+        Prisma.PrismaClientKnownRequestError
+      )
+      expect(mockPrisma.product.update).not.toHaveBeenCalled()
+    })
+
+    it('does not swallow a failure of the archive write itself', async () => {
+      mockPrisma.product.findFirst.mockResolvedValue(makeDbProduct())
+      mockPrisma.saleItem.count.mockResolvedValue(1)
+      mockPrisma.product.update.mockRejectedValue(new Error('db unavailable'))
 
       await expect(service.remove(SELLER_ID, PRODUCT_ID)).rejects.toThrow(
         'db unavailable'

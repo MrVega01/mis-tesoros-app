@@ -18,6 +18,11 @@ enum VerificationCodeType {
   PASSWORD_RESET
 }
 
+enum SaleStatus {
+  ACTIVE
+  REVERTED
+}
+
 // ─── Models ──────────────────────────────────────────────
 
 model User {
@@ -36,6 +41,8 @@ model User {
   verificationCodes VerificationCode[]
   categories        Category[]
   products          Product[]
+  sales             Sale[]             @relation("SellerSales")
+  purchases         Sale[]             @relation("CustomerSales")
 
   @@map("users")
 }
@@ -50,6 +57,8 @@ model SellerProfile {
   address            String?
   hoursOfOperation   Json?
   contactNumber      String
+  // USD → bolívar rate this seller prices with. Sales snapshot it at checkout.
+  customTaxRate      Decimal? @db.Decimal(12, 2)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -99,19 +108,79 @@ model Product {
   price    Decimal @db.Decimal(12, 2)
   quantity Int     @default(0)
 
+  // Products are archived, never deleted: a sold product must keep existing so
+  // its sale lines stay readable and a revert can restore its stock.
+  archivedAt DateTime?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  seller   User   @relation(fields: [sellerId], references: [id], onDelete: Cascade)
-  sellerId String
+  // Detaches rather than cascades, for the same reason a sale does: a sold
+  // product is pinned by SaleItem's Restrict FK, so cascading here would make
+  // the owning user undeletable. An orphaned product is invisible to every
+  // query (they all scope by a real sellerId) and is reaped once nothing
+  // references it — see SaleCleanupService.
+  seller   User?   @relation(fields: [sellerId], references: [id], onDelete: SetNull)
+  sellerId String?
 
   // Deleting a category keeps its products, they just become uncategorized.
   category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   categoryId String?
 
+  saleItems SaleItem[]
+
   @@index([sellerId])
   @@index([categoryId])
   @@map("products")
+}
+
+model Sale {
+  id     String     @id @default(uuid())
+  status SaleStatus @default(ACTIVE)
+  // Snapshots taken at checkout: the line total, and the rate it was sold at.
+  // Neither may be recomputed later — prices and the rate both move.
+  totalUsd     Decimal   @db.Decimal(12, 2)
+  exchangeRate Decimal?  @db.Decimal(12, 2)
+  revertedAt   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Both sides detach rather than cascade: a sale is a financial record that
+  // outlives the accounts on it. The row is only removed once BOTH are null
+  // (see SaleCleanupService) — deleting a user must never erase history the
+  // other party still needs.
+  seller   User?   @relation("SellerSales", fields: [sellerId], references: [id], onDelete: SetNull)
+  sellerId String?
+
+  // Always null for now; the column exists so sales can be attributed later.
+  customer   User?   @relation("CustomerSales", fields: [customerId], references: [id], onDelete: SetNull)
+  customerId String?
+
+  items SaleItem[]
+
+  @@index([sellerId])
+  @@index([customerId])
+  @@map("sales")
+}
+
+model SaleItem {
+  id       String @id @default(uuid())
+  quantity Int
+  // What was actually charged, and what the product was called at the time.
+  unitPrice   Decimal @db.Decimal(12, 2)
+  productName String
+
+  sale   Sale   @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  saleId String
+
+  // Restrict is what forces products to be archived instead of deleted.
+  product   Product @relation(fields: [productId], references: [id], onDelete: Restrict)
+  productId String
+
+  @@unique([saleId, productId])
+  @@index([productId])
+  @@map("sale_items")
 }
 
 model VerificationCode {
