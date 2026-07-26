@@ -1,40 +1,48 @@
 import { Alert, FlatList, StyleSheet, View } from 'react-native'
 import Constants from 'expo-constants'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { theme } from '../../theme'
 import StyledText from '../../components/StyledText'
 import StyledTextInput from '../../components/StyledTextInput'
 import StyledTouchableHighlight from '../../components/StyledTouchableHighlight'
-import { useState } from 'react'
 import useCategories, { useDeleteCategory, useSaveCategory } from '../../hooks/useCategories'
 import CategoryItem from '../../components/CategoryItem'
+import { resolveErrorMessage } from '../../utils/errorMessage'
+
+const SAVE_ERROR_MESSAGES = { 409: 'categories.errors.duplicate' }
 
 export default function CreateCategoryView ({ navigation }) {
   const [category, setCategory] = useState('')
-  const { categories, refresh } = useCategories()
-  const { saveCategory } = useSaveCategory()
-  const { deleteCategory } = useDeleteCategory()
-  const submitHandler = () => {
-    saveCategory(category)
-      .then(response => {
-        setCategory('')
-        setTimeout(() => refresh(), 100)
-      })
+  const { t } = useTranslation()
+  const { data: categories } = useCategories()
+  const saveCategory = useSaveCategory()
+  const deleteCategory = useDeleteCategory()
+
+  const submitHandler = async () => {
+    try {
+      await saveCategory.mutateAsync(category)
+      setCategory('')
+    } catch {}
   }
   const handleDeleteCategory = (category) => {
-    Alert.alert('Eliminar categoría', `La categoría "${category.type}" será eliminada`, [
+    Alert.alert('Eliminar categoría', `La categoría "${category.name}" será eliminada`, [
       {
         text: 'Cancelar',
         style: 'cancel'
       },
       {
         text: 'OK',
-        onPress: () => {
-          deleteCategory(category.id)
-            .then(() => setTimeout(() => refresh(), 100))
+        onPress: async () => {
+          try {
+            await deleteCategory.mutateAsync(category.id)
+          } catch {}
         }
       }
     ])
   }
+
+  const errorMessage = resolveErrorMessage(saveCategory.error, t, SAVE_ERROR_MESSAGES)
 
   return (
     <View style={styles.container}>
@@ -44,7 +52,14 @@ export default function CreateCategoryView ({ navigation }) {
         name='category'
         onChangeText={(name, value) => setCategory(value)}
       />
-      <StyledTouchableHighlight title='Crear' onPress={submitHandler} />
+      {errorMessage ? (
+        <StyledText style={styles.errorMessage}>{errorMessage}</StyledText>
+      ) : null}
+      <StyledTouchableHighlight
+        title='Crear'
+        onPress={submitHandler}
+        disabled={saveCategory.isPending}
+      />
       <StyledText
         align='center'
         size='title'
@@ -57,7 +72,7 @@ export default function CreateCategoryView ({ navigation }) {
         renderItem={({ item }) => (
           <CategoryItem
             id={item.id}
-            name={item.type}
+            name={item.name}
             style={styles.categoryItem}
             onDelete={() => handleDeleteCategory(item)}
           />
@@ -83,6 +98,11 @@ const styles = StyleSheet.create({
     marginVertical: 16
   },
   categoryItem: {
+    marginBottom: 8
+  },
+  errorMessage: {
+    color: theme.colors.danger,
+    fontSize: theme.fontSizes.sub,
     marginBottom: 8
   }
 })

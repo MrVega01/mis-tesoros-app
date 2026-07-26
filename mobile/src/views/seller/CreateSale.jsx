@@ -6,15 +6,12 @@ import { useMemo, useState } from 'react'
 import StyledTouchableHighlight from '../../components/StyledTouchableHighlight'
 import StyledText from '../../components/StyledText'
 import { useTaxRate } from '../../hooks/useTax'
-import { useIsFocused } from '@react-navigation/native'
-import useProducts from '../../hooks/useProducts'
-import useUpdateProduct from '../../hooks/useUpdateProduct'
+import useProducts, { useRegisterSale } from '../../hooks/useProducts'
 
 export default function CreateSaleView ({ navigation }) {
   const [quantityList, setQuantityList] = useState({})
-  const focused = useIsFocused()
-  const products = useProducts([focused])
-  const { registerProductSale } = useUpdateProduct()
+  const { data: products } = useProducts()
+  const registerSale = useRegisterSale()
   const tax = useTaxRate()
 
   const handleChangeQuantity = (productWithQuantity) => {
@@ -23,18 +20,23 @@ export default function CreateSaleView ({ navigation }) {
       [productWithQuantity.id]: productWithQuantity
     }))
   }
-  const handleRegisterSale = () => {
-    const productsQuantity = Object.entries(quantityList)
-    if (!productsQuantity.length) return
+  const handleRegisterSale = async () => {
+    // The stored entries carry the sold amount, so the current stock has to be
+    // read back from the products cache to send the NEW absolute level.
+    const soldItems = Object.entries(quantityList)
+      .filter(([, product]) => product.quantity > 0)
+      .map(([id, product]) => {
+        const stored = (products ?? []).find(item => item.id === id)
+        if (!stored) return null
+        return { id, quantity: stored.quantity - product.quantity }
+      })
+      .filter(Boolean)
+    if (!soldItems.length) return
 
-    registerProductSale(productsQuantity.map(([id, product]) => {
-      const previousQuantity = products.products.find(product => product.id === Number(id)).quantity
-
-      return {
-        id,
-        quantity: previousQuantity - product.quantity
-      }
-    })).then(response => response.ok && navigation.goBack())
+    try {
+      await registerSale.mutateAsync(soldItems)
+      navigation.goBack()
+    } catch {}
   }
   const totalCount = useMemo(() => {
     return Object.entries(quantityList).reduce((prev, curr) => {
@@ -46,7 +48,6 @@ export default function CreateSaleView ({ navigation }) {
   return (
     <View style={styles.container}>
       <ProductSaleList
-        useProducts={products}
         quantityList={quantityList}
         setQuantityList={handleChangeQuantity}
       />
@@ -78,6 +79,7 @@ export default function CreateSaleView ({ navigation }) {
           <StyledTouchableHighlight
             title='Registrar'
             onPress={handleRegisterSale}
+            disabled={registerSale.isPending}
           />
         </View>
       </View>

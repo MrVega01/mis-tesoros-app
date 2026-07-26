@@ -1,69 +1,46 @@
-import { useEffect, useRef, useState } from 'react'
-import { API_URL } from '../utils/constants'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { authFetch } from '../utils/authFetch'
+import { PRODUCTS_KEY } from './useProducts'
 
-export default function useCategories (fetchDependencies = []) {
-  const [categories, setCategories] = useState([])
-  const [refresh, setRefresh] = useState(false)
-  const loading = useRef(false)
+export const CATEGORIES_KEY = ['categories']
 
-  const refreshFetch = () => {
-    setRefresh(refresh => !refresh)
-  }
-
-  useEffect(() => {
-    loading.current = true
-
-    globalThis.fetch(`${API_URL}/types`)
-      .then(response => response.json())
-      .then(response => {
-        console.log(response, 'response')
-        setCategories(response)
-        loading.current = true
-      })
-      .catch(e => console.log(e))
-  }, [...fetchDependencies, refresh])
-
-  return { categories, loading, refresh: refreshFetch }
+export default function useCategories () {
+  return useQuery({
+    queryKey: CATEGORIES_KEY,
+    queryFn: () => authFetch('/categories')
+  })
 }
+
 export function useSaveCategory () {
-  const [loading, setLoading] = useState(false)
-
-  const saveCategory = async (category) => {
-    if (!category) return false
-    try {
-      setLoading(true)
-      const insertTo = JSON.stringify({ type: category })
-
-      globalThis.fetch(`${API_URL}/types`, {
-        method: 'POST',
-        body: insertTo,
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-    } catch (e) {
-      console.log(e)
-      return e
-    } finally {
-      setLoading(false)
-    }
-  }
-  return { saveCategory, loading }
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (name) =>
+      authFetch('/categories', { method: 'POST', body: { name } }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: CATEGORIES_KEY })
+  })
 }
-export function useDeleteCategory () {
-  const [loading, setLoading] = useState(false)
 
-  const deleteCategory = (id) => {
-    if (id) {
-      setLoading(true)
-
-      return globalThis.fetch(`${API_URL}/types/${id}`, { method: 'DELETE' })
-        .then(() => {
-          setLoading(false)
-        })
-        .catch(e => console.log(e))
+export function useUpdateCategory () {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, name }) =>
+      authFetch(`/categories/${id}`, { method: 'PATCH', body: { name } }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: CATEGORIES_KEY })
+      // Products embed the category name, so a rename makes them stale too.
+      queryClient.invalidateQueries({ queryKey: PRODUCTS_KEY })
     }
-  }
+  })
+}
 
-  return { deleteCategory, loading }
+export function useDeleteCategory () {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (id) => authFetch(`/categories/${id}`, { method: 'DELETE' }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: CATEGORIES_KEY })
+      // Deleting a category uncategorizes its products server-side.
+      queryClient.invalidateQueries({ queryKey: PRODUCTS_KEY })
+    }
+  })
 }

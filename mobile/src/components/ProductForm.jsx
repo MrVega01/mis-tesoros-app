@@ -1,35 +1,38 @@
 import { StyleSheet, View } from 'react-native'
+import { useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import StyledTextInput from './StyledTextInput'
 import StyledPicker from './StyledPicker'
-import { theme } from '../theme'
 import StyledText from './StyledText'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import useSaveProduct from '../hooks/useSaveProduct'
 import StyledTouchableHighlight from './StyledTouchableHighlight'
 import useCategories from '../hooks/useCategories'
-import { useIsFocused } from '@react-navigation/native'
+import { useSaveProduct } from '../hooks/useProducts'
+import { resolveErrorMessage } from '../utils/errorMessage'
+import { theme } from '../theme'
 
 export function ProductForm () {
   const [formValues, setFormValues] = useState({})
   const formRefs = useRef([])
-  const focused = useIsFocused()
-  const { categories } = useCategories([focused])
-  const { saveProduct, loading } = useSaveProduct()
+  const { t } = useTranslation()
+  const { data: categories } = useCategories()
+  const saveProduct = useSaveProduct()
 
   const pickerValues = useMemo(() => {
-    return categories.map(({ id, type }) => [type, id])
+    return (categories ?? []).map(({ id, name }) => [name, id])
   }, [categories])
 
-  const submitHandler = () => {
-    saveProduct(formValues)
+  const submitHandler = async () => {
+    try {
+      await saveProduct.mutateAsync(formValues)
+      formRefs.current.forEach(input => input && input.clear())
+      setFormValues({})
+    } catch {}
   }
   const changeInputHandler = (name, value) => {
     setFormValues(oldValues => ({ ...oldValues, [name]: value }))
   }
 
-  useEffect(() => {
-    if (loading === true) formRefs.current.forEach(input => input.clear())
-  }, [loading])
+  const errorMessage = resolveErrorMessage(saveProduct.error, t)
 
   return (
     <View style={styles.container}>
@@ -49,7 +52,7 @@ export function ProductForm () {
       <StyledText style={styles.label}>Inserte el tipo</StyledText>
       <StyledPicker
         formValues={formValues}
-        name='type'
+        name='categoryId'
         onChange={changeInputHandler}
         items={pickerValues}
       />
@@ -60,7 +63,14 @@ export function ProductForm () {
         onChangeText={changeInputHandler}
         keyboardType='numeric'
       />
-      <StyledTouchableHighlight title='Subir' onPress={submitHandler} />
+      {errorMessage ? (
+        <StyledText style={styles.errorMessage}>{errorMessage}</StyledText>
+      ) : null}
+      <StyledTouchableHighlight
+        title='Subir'
+        onPress={submitHandler}
+        disabled={saveProduct.isPending}
+      />
     </View>
   )
 }
@@ -72,5 +82,10 @@ const styles = StyleSheet.create({
   label: {
     color: theme.colors.textSecondary,
     marginBottom: 3
+  },
+  errorMessage: {
+    color: theme.colors.danger,
+    fontSize: theme.fontSizes.sub,
+    marginBottom: 8
   }
 })

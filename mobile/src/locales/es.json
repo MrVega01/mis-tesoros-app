@@ -241,5 +241,10 @@
     "home": {
       "placeholder": "Próximamente"
     }
+  },
+  "categories": {
+    "errors": {
+      "duplicate": "Ya tienes una categoría con ese nombre"
+    }
   }
 }

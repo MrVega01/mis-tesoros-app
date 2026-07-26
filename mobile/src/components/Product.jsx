@@ -3,14 +3,14 @@ import StyledText from './StyledText'
 import { theme } from '../theme'
 
 export function Product ({ product, tax, onLongPress }) {
-  const { name, price, type, quantity } = product
+  const { name, price, category, quantity } = product
 
   return (
     <TouchableHighlight onLongPress={() => { onLongPress && onLongPress(product) }}>
       <View style={styles.container}>
         <View style={styles.textBox}>
           <StyledText size='title'>{name}</StyledText>
-          {type !== null && <StyledText size='sub' style={styles.description}>{type}</StyledText>}
+          {category?.name ? <StyledText size='sub' style={styles.description}>{category.name}</StyledText> : null}
           {quantity !== null && <StyledText size='sub' style={styles.description}>{quantity} unidades</StyledText>}
         </View>
         <View style={styles.textBox}>
