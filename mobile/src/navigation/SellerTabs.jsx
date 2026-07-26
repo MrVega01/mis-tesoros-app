@@ -10,7 +10,7 @@ import { StyleSheet } from 'react-native'
 import { BottomNavigation } from 'react-native-paper'
 import ProductsView from '../views/seller/Products'
 import Messages from '../views/core/Messages'
-import TaxView from '../views/seller/Tax'
+import ShopOptionsView from '../views/seller/ShopOptions'
 import Settings from '../views/core/Settings'
 
 const Tab = createBottomTabNavigator()
@@ -77,11 +77,11 @@ export default function SellerTabs () {
         }}
       />
       <Tab.Screen
-        name='Tasa'
-        component={TaxView}
+        name='Opciones'
+        component={ShopOptionsView}
         options={{
           headerShown: false,
-          tabBarLabel: t('tabs.tax'),
+          tabBarLabel: t('tabs.shopOptions'),
           tabBarIcon: ({ color }) => (
             <MoneySVG color={color} />
           )

@@ -16,7 +16,7 @@ import BootSplash from '../components/BootSplash'
 import useAuthState from '../hooks/useAuthState'
 import useAuthSession from '../hooks/useAuthSession'
 import useOnboarding from '../hooks/useOnboarding'
-import { useTaxHydration } from '../hooks/useTax'
+import { useTaxSync } from '../hooks/useTax'
 import { useEffect } from 'react'
 import { STATUS } from '../utils/authConstants'
 
@@ -33,7 +33,7 @@ export default function RootNavigator () {
   const { restoreSession } = useAuthSession()
   const { hasSeenOnboarding } = useOnboarding()
 
-  useTaxHydration()
+  useTaxSync()
 
   useEffect(() => {
     restoreSession()

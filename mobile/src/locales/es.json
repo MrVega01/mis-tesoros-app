@@ -233,9 +233,28 @@
   },
   "tabs": {
     "products": "Productos",
-    "tax": "Tasa",
+    "shopOptions": "Opciones",
     "messages": "Mensajes",
     "home": "Inicio"
+  },
+  "shopOptions": {
+    "title": "Opciones de la tienda",
+    "rate": "Tasa del día",
+    "rateHint": "Toca para cambiar la tasa",
+    "categories": "Categorías",
+    "categoriesHint": "Toca para administrar tus categorías",
+    "dialogTitle": "Cambiar la tasa",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "errors": {
+      "noProfile": "Completa los datos de tu negocio antes de fijar la tasa."
+    }
+  },
+  "sales": {
+    "errors": {
+      "insufficientStock": "No hay suficiente inventario para esta venta.",
+      "stockChanged": "El inventario cambió mientras registrabas la venta. Intenta de nuevo."
+    }
   },
   "customer": {
     "home": {

@@ -3,17 +3,12 @@ import { StyleSheet, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import { theme } from '../../theme'
-import { USER_ROLE } from '../../utils/constants'
+import { ROLE_LABEL_KEYS } from '../../utils/constants'
 import useAuthState from '../../hooks/useAuthState'
 import { useMe } from '../../hooks/useProfile'
 import { useLogout } from '../../hooks/useAuth'
 import StyledText from '../../components/StyledText'
 import StyledTouchableHighlight from '../../components/StyledTouchableHighlight'
-
-const ROLE_LABEL_KEYS = {
-  [USER_ROLE.SELLER]: 'account.roles.seller',
-  [USER_ROLE.CUSTOMER]: 'account.roles.customer'
-}
 
 export default function Settings () {
   const { t } = useTranslation()

@@ -4,8 +4,6 @@ export const API_URL = process.env.EXPO_PUBLIC_API_URL
 
 export const ONBOARDING_SEEN_KEY = 'onboarding.seen'
 
-export const TAX_KEY = 'tax'
-
 // Re-exported from the shared contract so the API and mobile agree on one set
 // of role / verification-code values. See packages/contract.
 export const USER_ROLE = UserRole
@@ -20,6 +18,22 @@ export const AUTH_ERROR_KEYS = {
   resetPassword: { 400: 'resetPassword.errors.tokenExpired' },
   fillCustomerData: {},
   fillSellerData: {}
+}
+
+// Same shape as AUTH_ERROR_KEYS, for the seller's shop screens. Anything not
+// listed falls through to resolveErrorMessage's generic network/unknown copy.
+export const SHOP_ERROR_KEYS = {
+  createCategory: { 409: 'categories.errors.duplicate' },
+  createSale: {
+    400: 'sales.errors.insufficientStock',
+    409: 'sales.errors.stockChanged'
+  },
+  taxRate: { 404: 'shopOptions.errors.noProfile' }
+}
+
+export const ROLE_LABEL_KEYS = {
+  [UserRole.SELLER]: 'account.roles.seller',
+  [UserRole.CUSTOMER]: 'account.roles.customer'
 }
 
 export const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']

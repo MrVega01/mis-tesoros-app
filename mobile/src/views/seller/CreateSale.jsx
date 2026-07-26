@@ -5,13 +5,16 @@ import ProductSaleList from '../../components/ProductSaleList'
 import { useMemo, useState } from 'react'
 import StyledTouchableHighlight from '../../components/StyledTouchableHighlight'
 import StyledText from '../../components/StyledText'
+import { useTranslation } from 'react-i18next'
 import { useTaxRate } from '../../hooks/useTax'
-import useProducts, { useRegisterSale } from '../../hooks/useProducts'
+import { useCreateSale } from '../../hooks/useSales'
+import { resolveErrorMessage } from '../../utils/errorMessage'
+import { SHOP_ERROR_KEYS } from '../../utils/constants'
 
 export default function CreateSaleView ({ navigation }) {
   const [quantityList, setQuantityList] = useState({})
-  const { data: products } = useProducts()
-  const registerSale = useRegisterSale()
+  const { t } = useTranslation()
+  const createSale = useCreateSale()
   const tax = useTaxRate()
 
   const handleChangeQuantity = (productWithQuantity) => {
@@ -21,20 +24,15 @@ export default function CreateSaleView ({ navigation }) {
     }))
   }
   const handleRegisterSale = async () => {
-    // The stored entries carry the sold amount, so the current stock has to be
-    // read back from the products cache to send the NEW absolute level.
-    const soldItems = Object.entries(quantityList)
+    // Sold amounts, not stock levels: the server does the arithmetic and the
+    // stock check in one transaction.
+    const items = Object.entries(quantityList)
       .filter(([, product]) => product.quantity > 0)
-      .map(([id, product]) => {
-        const stored = (products ?? []).find(item => item.id === id)
-        if (!stored) return null
-        return { id, quantity: stored.quantity - product.quantity }
-      })
-      .filter(Boolean)
-    if (!soldItems.length) return
+      .map(([productId, product]) => ({ productId, quantity: product.quantity }))
+    if (!items.length) return
 
     try {
-      await registerSale.mutateAsync(soldItems)
+      await createSale.mutateAsync(items)
       navigation.goBack()
     } catch {}
   }
@@ -44,6 +42,12 @@ export default function CreateSaleView ({ navigation }) {
       return prev + currentPrice
     }, 0)
   }, [quantityList])
+
+  const errorMessage = resolveErrorMessage(
+    createSale.error,
+    t,
+    SHOP_ERROR_KEYS.createSale
+  )
 
   return (
     <View style={styles.container}>
@@ -76,10 +80,13 @@ export default function CreateSaleView ({ navigation }) {
             <StyledText size='subheading'>Total:</StyledText>
             <StyledText size='title' bold>{(totalCount * tax).toFixed(2)}bs</StyledText>
           </View>
+          {errorMessage
+            ? <StyledText size='sub' style={styles.error}>{errorMessage}</StyledText>
+            : null}
           <StyledTouchableHighlight
             title='Registrar'
             onPress={handleRegisterSale}
-            disabled={registerSale.isPending}
+            disabled={createSale.isPending}
           />
         </View>
       </View>
@@ -107,5 +114,8 @@ const styles = StyleSheet.create({
   containerTotal: {
     flex: 2,
     gap: 12
+  },
+  error: {
+    color: theme.colors.danger
   }
 })

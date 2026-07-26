@@ -9,8 +9,7 @@ import StyledTouchableHighlight from '../../components/StyledTouchableHighlight'
 import useCategories, { useDeleteCategory, useSaveCategory } from '../../hooks/useCategories'
 import CategoryItem from '../../components/CategoryItem'
 import { resolveErrorMessage } from '../../utils/errorMessage'
-
-const SAVE_ERROR_MESSAGES = { 409: 'categories.errors.duplicate' }
+import { SHOP_ERROR_KEYS } from '../../utils/constants'
 
 export default function CreateCategoryView ({ navigation }) {
   const [category, setCategory] = useState('')
@@ -42,7 +41,7 @@ export default function CreateCategoryView ({ navigation }) {
     ])
   }
 
-  const errorMessage = resolveErrorMessage(saveCategory.error, t, SAVE_ERROR_MESSAGES)
+  const errorMessage = resolveErrorMessage(saveCategory.error, t, SHOP_ERROR_KEYS.createCategory)
 
   return (
     <View style={styles.container}>

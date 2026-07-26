@@ -68,26 +68,3 @@ export function useDeleteProduct () {
   })
 }
 
-/**
- * Registers a sale by decrementing each sold product's stock.
- *
- * There is no /sales endpoint yet, so this is a client-side loop of PATCHes:
- * it is NOT atomic — a failure partway through leaves earlier products already
- * decremented. Replace with a single server-side transaction once the sales
- * endpoint exists.
- */
-export function useRegisterSale () {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: (items) =>
-      Promise.all(
-        items.map(({ id, quantity }) =>
-          authFetch(`/products/${id}`, {
-            method: 'PATCH',
-            body: { quantity: toQuantity(quantity) }
-          })
-        )
-      ),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: PRODUCTS_KEY })
-  })
-}

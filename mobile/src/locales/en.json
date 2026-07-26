@@ -233,9 +233,28 @@
   },
   "tabs": {
     "products": "Products",
-    "tax": "Exchange rate",
+    "shopOptions": "Options",
     "messages": "Messages",
     "home": "Home"
+  },
+  "shopOptions": {
+    "title": "Shop options",
+    "rate": "Today's rate",
+    "rateHint": "Tap to change the rate",
+    "categories": "Categories",
+    "categoriesHint": "Tap to manage your categories",
+    "dialogTitle": "Change the rate",
+    "save": "Save",
+    "cancel": "Cancel",
+    "errors": {
+      "noProfile": "Complete your business details before setting a rate."
+    }
+  },
+  "sales": {
+    "errors": {
+      "insufficientStock": "Not enough stock for this sale.",
+      "stockChanged": "Stock changed while registering the sale. Please try again."
+    }
   },
   "customer": {
     "home": {
